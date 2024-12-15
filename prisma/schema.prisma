@@ -1,0 +1,212 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// OREDR SCHEMA
+model orders {
+  id            Int    @id @default(autoincrement())
+  productId     Int?
+  address       String
+  electricBill  Int
+  roofSize      Int
+  userFirstName String
+  userLastName  String
+  userEmail     String
+  userPhone     String
+
+  product   products? @relation(fields: [productId], references: [id])
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+// PRODUCT SCHEMA
+model products {
+  id       Int      @id @default(autoincrement())
+  title    String
+  subTitle String
+  photo    String?  @default("")
+  orders   orders[]
+
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+//SOLAR SCEMA
+model page {
+  id             Int             @id @default(autoincrement())
+  title          String
+  slug           String          @unique
+  firstSection   firstSection?
+  secondSection  secondSection?
+  thirdSection   thirdSection[]
+  fourthSection  fourthSection[]
+  fifthSection   fifthSection?
+  sixthSection   sixthSection[]
+  seventhSection seventhSection?
+  eighthSection  eighthSection?
+  ninethSection  ninethSection?
+  tenthSection   tenthSection[]
+
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model firstSection {
+  id       Int     @id @default(autoincrement())
+  title    String
+  subtitle String
+  photo    String? @default("")
+  video    String? @default("")
+
+  pageId Int  @unique
+  page   page @relation(fields: [pageId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model secondSection {
+  id       Int     @id @default(autoincrement())
+  title    String
+  subtitle String
+  photo    String? @default("")
+  video    String? @default("")
+
+  pageId Int  @unique
+  page   page @relation(fields: [pageId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model thirdSection {
+  id          Int    @id @default(autoincrement())
+  titleone    String
+  subtitleone String
+
+  titletwo    String
+  subtitletwo String
+
+  titlthree    String
+  subtitlthree String
+
+  pageId Int
+  page   page @relation(fields: [pageId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model fourthSection {
+  id       Int     @id @default(autoincrement())
+  title    String
+  subtitle String
+  tag      String
+  desc     String
+  photo    String? @default("")
+  video    String? @default("")
+
+  pageId Int
+  page   page @relation(fields: [pageId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model fifthSection {
+  id       Int     @id @default(autoincrement())
+  title    String
+  subtitle String
+  photo    String? @default("")
+  video    String? @default("")
+
+  pageId Int  @unique
+  page   page @relation(fields: [pageId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model sixthSection {
+  id       Int     @id @default(autoincrement())
+  title    String
+  subtitle String
+  photo    String? @default("")
+  video    String? @default("")
+
+  pageId Int
+  page   page @relation(fields: [pageId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model seventhSection {
+  id       Int     @id @default(autoincrement())
+  title    String
+  subtitle String
+  photo    String? @default("")
+  video    String? @default("")
+
+  pageId Int  @unique
+  page   page @relation(fields: [pageId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model eighthSection {
+  id       Int     @id @default(autoincrement())
+  title    String
+  subtitle String
+  photo    String? @default("")
+  video    String? @default("")
+
+  titleone    String
+  subtitleone String
+
+  titletwo    String
+  subtitletwo String
+
+  titlethree    String
+  subtitlethree String
+
+  pageId Int  @unique
+  page   page @relation(fields: [pageId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model ninethSection {
+  id       Int     @id @default(autoincrement())
+  title    String
+  subtitle String
+  photo    String? @default("")
+  video    String? @default("")
+
+  pageId Int  @unique
+  page   page @relation(fields: [pageId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model tenthSection {
+  id       Int     @id @default(autoincrement())
+  title    String
+  subtitle String
+  photo    String? @default("")
+  video    String? @default("")
+
+  pageId Int
+  page   page @relation(fields: [pageId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}

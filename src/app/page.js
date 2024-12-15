@@ -1,101 +1,78 @@
-import Image from "next/image";
+import Link from "next/link";
+// button color #133871
+
+const homeData = [
+  {
+    title: "Innovating Water, Inspiring Health",
+    description:
+      "Transforming the essence of life with cutting-edge technology for a healthier tomorrow",
+    backgroundImage: "/images/home-1.jpg",
+    link1: "water",
+    link2: "water",
+  },
+  {
+    title: "Harness Solar Energy",
+    description: "Save Money, Power Your Home and Apartment Efficiently",
+    backgroundImage: "/images/solar-panels-desktop.jpg",
+    link1: "solarpanels",
+    link2: "solarpanels",
+  },
+  {
+    title: "HVAC",
+    description: "Heating, Ventilation, and Air Conditioning",
+    backgroundImage: "/images/home-1.jpg",
+    link1: "hvac",
+    link2: "hvac",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="relative text-white">
+      {homeData?.map((home, index) => {
+        return (
+          <div
+            key={index}
+            className="w-full h-screen bg-cover bg-center flex flex-col items-center justify-between py-20"
+            style={{ backgroundImage: `url(${home.backgroundImage})` }}
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <div className="text-center space-y-5">
+              <h1 className="sm:text-[56px] text-4xl font-semibold">
+                {home.title}
+              </h1>
+              <h1 className="sm:text-[34px] font-medium text-xl">
+                {home.description}
+              </h1>
+            </div>
+            <div className="flex items-center justify-between sm:gap-x-5 gap-x-2 max-w-[544px] w-full sm:h-[40px] h-[35px] max-sm:px-5">
+              <Link
+                href={`/${home.link1}/order`}
+                className="w-full h-full flex items-center justify-center text-sm font-semibold bg-[#3E6AE1] rounded text-white"
+              >
+                Book a Consultation
+              </Link>
+              <Link
+                href={`/${home.link2}`}
+                className="w-full h-full flex items-center justify-center text-sm font-semibold bg-white rounded text-[#393C41]"
+              >
+                Learn More
+              </Link>
+            </div>
+          </div>
+        );
+      })}
+      <div className="flex items-center justify-center gap-x-3 text-xs opacity-70 font-semibold text-black bg-white my-10">
+        <button>Tesla © 2024</button>
+        <button>Privacy & Legal</button>
+        <button>Vehicle Recalls</button>
+        <button>Contact</button>
+        <button>News</button>
+        <button>Get Updates</button>
+        <button>Locations</button>
+        <Link href={"/dashboard"}>
+          <button>Admin</button>
+        </Link>
+      </div>
     </div>
   );
 }
