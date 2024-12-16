@@ -19,6 +19,8 @@ const SecondSection = () => {
     photo: "",
   });
 
+  console.log(input);
+  
   useEffect(() => {
     const fetchData = async () => {
       const secondData = await getSecondSectionData(1);
@@ -41,7 +43,7 @@ const SecondSection = () => {
       title: input.title,
       subtitle: input.subtitle,
       photo: input.photo,
-      pageId: 1,
+      pageId: 2,
     };
 
     console.log(updateData);

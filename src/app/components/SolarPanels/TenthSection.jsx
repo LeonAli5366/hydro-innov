@@ -18,7 +18,7 @@ export default function TenthSection() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const allData = await getAllPageData(1); 
+        const allData = await getAllPageData(2); 
         console.log("All Data:", allData);
 
         const tenthSection = allData?.tenthSection || [];

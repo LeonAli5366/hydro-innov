@@ -1,10 +1,48 @@
+'use client'
 import VideoSlide from "../components/VideoSlide";
 import Image from "next/image";
 import ImageSlide from "../components/ImageSlide";
 import SideImageSlide from "../components/SideImageSlide";
 import Link from "next/link";
+import getAllPageData from "../lib/getAllPageData";
+import { useEffect } from "react";
 
-const page = () => {
+
+
+
+const page = async () => {
+
+  const allData = await getAllPageData(2); 
+  console.log(allData);
+
+  const secondSection = allData?.secondSection || [];
+  console.log(secondSection);
+  
+  
+
+
+  // useEffect(() => {
+  //     const fetchData = async () => {
+  //       try {
+  //         const allData = await getAllPageData(2); 
+  //         console.log("All Data:", allData);
+  
+  //         const tenthSection = allData?.tenthSection || [];
+  //         console.log("Tenth Section Data:", tenthSection);
+  
+  //         setTenthSectionData(tenthSection); 
+  //       } catch (err) {
+  //         console.error("Error fetching data:", err.message);
+  //         setError(err.message);
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
+  
+  //     fetchData();
+  //   }, []);
+
+
   return (
     <>
       {/* sec 1 */}
@@ -34,16 +72,15 @@ const page = () => {
           </div>
         </div>
       </div>
+
+
       {/* sec 2 */}
       <div className="text-center bg-white text-black sm:pt-[120px] pt-10 sm:px-[48px] px-5 pb-[40px] space-y-2">
         <h1 className="sm:text-2xl text-[22px] text-[#171A20] font-bold opacity-90">
-          Save Big with Solar Over Time
+          {secondSection.title}
         </h1>
         <p className="max-w-2xl mx-auto text-sm text-gray-700 font-medium opacity-90">
-          Harness the sun&apos;s power to generate clean, free energy for your
-          home or apartment. Pair it with Powerwall to store energy and access
-          it whenever you need. Take advantage of tax incentives and flexible
-          financing options to secure the best value for your solar system.
+         {secondSection.subtitle}
         </p>
       </div>
       {/* sec 3 */}

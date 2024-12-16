@@ -266,7 +266,7 @@ const page = () => {
       <EigthSection />
 
       {/* sec 9 */}
-      <NinethSection />
+      {/* <NinethSection /> */}
 
       {/* sec 10 */}
       <TenthSection />
