@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-async-client-component */
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-import getFirstSectionData from "@/app/lib/firstSectionData";
+import getAllPageData from "@/app/lib/getAllPageData";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,17 +13,18 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import React, { useState } from "react";
 
-const fisrtData = await getFirstSectionData(1);
+// Fetch data
+const allData = await getAllPageData(2);
+const fisrtData = allData?.firstSection || [];
 console.log(fisrtData);
+
 
 const FirstSection = () => {
   const [input, setinput] = useState({
     title: fisrtData.title,
-    subtitle: fisrtData.title,
+    subtitle: fisrtData.subtitle,
     video: fisrtData.video,
   });
-
-
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -33,7 +34,7 @@ const FirstSection = () => {
       title: input.title,
       subtitle: input.subtitle,
       video: input.video,
-      pageId: 1,
+      pageId: 2,
     };
 
     console.log(updateData);
@@ -67,7 +68,7 @@ const FirstSection = () => {
 
     try {
       const apiRes = await fetch(
-        `http://localhost:3000/api/dashboard/tesla/firstSection?id=1`,
+        `http://localhost:3000/api/dashboard/tesla/firstSection?id=2`,
         {
           method: "PUT",
           headers: {
@@ -89,7 +90,6 @@ const FirstSection = () => {
       alert("An error occurred while updating the Section.");
     }
   };
-
 
   return (
     <div className="p-5">

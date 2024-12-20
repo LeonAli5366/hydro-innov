@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import getEightSectionData from "@/app/lib/eigthSectionData";
+import getAllPageData from "@/app/lib/getAllPageData";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,37 +12,29 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import React, { useState, useEffect } from "react";
 
+
+// Fetch data
+const allData = await getAllPageData(2);
+const eigthData = allData?.eighthSection || [];
+console.log(eigthData);
+
 const EigthSection = () => {
   const [input, setInput] = useState({
-    title: "",
-    subtitle: "",
-    titleone: "",
-    subtitleone: "",
-    titletwo: "",
-    subtitletwo: "",
-    titlethree: "",
-    subtitlethree: "",
-    photo: "",
+    title: eigthData.title,
+    subtitle: eigthData.subtitle,
+
+    titleone: eigthData.titleone,
+    subtitleone: eigthData.subtitleone,
+
+    titletwo: eigthData.titletwo,
+    subtitletwo: eigthData.subtitletwo,
+
+    titlethree: eigthData.titlethree,
+    subtitlethree: eigthData.subtitlethree,
+    photo: eigthData.photo,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const eightData = await getEightSectionData(1);
-      setInput({
-        title: eightData.title || "",
-        subtitle: eightData.subtitle || "",
-        titleone: eightData.titleone || "",
-        subtitleone: eightData.subtitleone || "",
-        titletwo: eightData.titletwo || "",
-        subtitletwo: eightData.subtitletwo || "",
-        titlethree: eightData.titlethree || "",
-        subtitlethree: eightData.subtitlethree || "",
-        photo: eightData.photo || "",
-      });
-    };
 
-    fetchData();
-  }, []);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -58,7 +50,7 @@ const EigthSection = () => {
       subtitletwo: input.subtitletwo,
       titlethree: input.titlethree,
       subtitlethree: input.subtitlethree,
-      pageId: 1,
+      pageId: 2,
       photo: input.photo, 
     };
 
@@ -97,7 +89,7 @@ const EigthSection = () => {
 
     try {
       const apiRes = await fetch(
-        `http://localhost:3000/api/dashboard/tesla/eighthSection?id=1`,
+        `http://localhost:3000/api/dashboard/tesla/eighthSection?id=2`,
         {
           method: "PUT",
           headers: {

@@ -5,7 +5,6 @@ import ImageSlide from "../components/ImageSlide";
 import SideImageSlide from "../components/SideImageSlide";
 import Link from "next/link";
 import getAllPageData from "../lib/getAllPageData";
-import { useEffect } from "react";
 
 
 

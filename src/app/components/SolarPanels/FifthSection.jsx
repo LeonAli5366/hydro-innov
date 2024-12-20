@@ -9,29 +9,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState, useEffect } from "react";
-import getFifthSectionData from "@/app/lib/fifthSectionData";
+import React, { useState } from "react";
+import getAllPageData from "@/app/lib/getAllPageData";
+
+// Fetch data
+const allData = await getAllPageData(2);
+const fifthData = allData?.fifthSection || [];
+console.log(fifthData);
 
 const FifthSection = () => {
   const [input, setInput] = useState({
-    title: "",
-    subtitle: "",
-    photo: "",
+    title: fifthData.title,
+    subtitle:fifthData.subtitle,
+    photo: fifthData.photo,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const fifthData = await getFifthSectionData(1);
-      console.log(fifthData);
-      setInput({
-        title: fifthData.title || "",
-        subtitle: fifthData.subtitle || "",
-        photo: fifthData.photo || "",
-      });
-    };
-
-    fetchData();
-  }, []);
+  
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -41,7 +34,7 @@ const FifthSection = () => {
       title: input.title,
       subtitle: input.subtitle,
       photo: input.photo,
-      pageId: 1,
+      pageId: 2,
     };
 
     if (photoFile) {

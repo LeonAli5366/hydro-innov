@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import getSeventhSectionData from "@/app/lib/seventhSectionData";
+import getAllPageData from "@/app/lib/getAllPageData";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,26 +12,19 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import React, { useState, useEffect } from "react";
 
+// Fetch data
+const allData = await getAllPageData(2);
+const seventhData = allData?.seventhSection || [];
+console.log(seventhData);
+
 const SeventhSection = () => {
   const [input, setInput] = useState({
-    title: "",
-    subtitle: "",
-    photo: "",
+    title: seventhData.title,
+    subtitle: seventhData.subtitle,
+    photo: seventhData.photo,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const seventhData = await getSeventhSectionData(1);
-      console.log(seventhData);
-      setInput({
-        title: seventhData.title || "",
-        subtitle: seventhData.subtitle || "",
-        photo: seventhData.photo || "",
-      });
-    };
 
-    fetchData();
-  }, []);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -41,7 +34,7 @@ const SeventhSection = () => {
       title: input.title,
       subtitle: input.subtitle,
       photo: input.photo,
-      pageId: 1,
+      pageId: 2,
     };
 
     if (photoFile) {
@@ -73,7 +66,7 @@ const SeventhSection = () => {
 
     try {
       const apiRes = await fetch(
-        `http://localhost:3000/api/dashboard/tesla/seventhSection?id=1`,
+        `http://localhost:3000/api/dashboard/tesla/seventhSection?id=2`,
         {
           method: "PUT",
           headers: {

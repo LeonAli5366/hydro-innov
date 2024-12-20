@@ -51,6 +51,8 @@ export async function DELETE(req, res) {
 
 // UPDATE tenthSection
 export async function PUT(req) {
+  let { searchParams } = new URL(req.url);
+  let tenth_id = searchParams.get("id");
   const prisma = new PrismaClient();
 
   try {
@@ -58,6 +60,7 @@ export async function PUT(req) {
 
     const tenthSection = await prisma.tenthSection.findFirst({
       where: {
+        id: parseInt(tenth_id),
         pageId: parseInt(pageId),
       },
     });

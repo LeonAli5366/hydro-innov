@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import getNinethSectionData from "@/app/lib/ninethSectionData";
+import getAllPageData from "@/app/lib/getAllPageData";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,28 +10,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+
+// Fetch data
+const allData = await getAllPageData(2);
+const ninethData = allData?.ninethSection || [];
+console.log(ninethData);
+
+
 
 const NinethSection = () => {
   const [input, setInput] = useState({
-    title: "",
-    subtitle: "",
-    photo: "",
+    title:ninethData.title,
+    subtitle:ninethData.subtitle,
+    photo: ninethData.photo,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const ninethData = await getNinethSectionData(1);
-      console.log(ninethData);
-      setInput({
-        title: ninethData.title || "",
-        subtitle: ninethData.subtitle || "",
-        photo: ninethData.photo || "",
-      });
-    };
-
-    fetchData();
-  }, []);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -41,7 +35,7 @@ const NinethSection = () => {
       title: input.title,
       subtitle: input.subtitle,
       photo: input.photo,
-      pageId: 1,
+      pageId: 2,
     };
 
     if (photoFile) {
@@ -73,7 +67,7 @@ const NinethSection = () => {
 
     try {
       const apiRes = await fetch(
-        `http://localhost:3000/api/dashboard/tesla/ninethSection?id=1`,
+        `http://localhost:3000/api/dashboard/tesla/ninethSection?id=2`,
         {
           method: "PUT",
           headers: {

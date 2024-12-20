@@ -9,31 +9,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState, useEffect } from "react";
-import getSecondSectionData from "@/app/lib/secondSectionData";
+import React, { useState } from "react";
+import getAllPageData from "@/app/lib/getAllPageData";
+
+// Fetch data
+const allData = await getAllPageData(2);
+const secondData = allData?.secondSection || [];
+console.log(secondData);
 
 const SecondSection = () => {
   const [input, setInput] = useState({
-    title: "",
-    subtitle: "",
-    photo: "",
+    title:secondData.title,
+    subtitle: secondData.subtitle,
+    photo: secondData.photo,
   });
 
-  console.log(input);
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      const secondData = await getSecondSectionData(1);
-      console.log(secondData);
-      setInput({
-        title: secondData.title || "",
-        subtitle: secondData.subtitle || "",
-        photo: secondData.photo || "",
-      });
-    };
 
-    fetchData();
-  }, []);
+
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -77,7 +69,7 @@ const SecondSection = () => {
 
     try {
       const apiRes = await fetch(
-        `http://localhost:3000/api/dashboard/tesla/secondSection?id=1`,
+        `http://localhost:3000/api/dashboard/tesla/secondSection?id=2`,
         {
           method: "PUT",
           headers: {
