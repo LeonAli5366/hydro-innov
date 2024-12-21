@@ -23,47 +23,23 @@ const FirstSection = () => {
     video: fisrtData.video,
   });
 
+  const [progress, setProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const [videoUrl, setVideoUrl] = useState("");
 
+  
 
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-    const videoFile = e.target.video?.files[0];
     const updateData = {
       title: input.title,
       subtitle: input.subtitle,
-      video: input.video,
+      video: videoUrl,
       pageId: 1,
     };
 
     console.log(updateData);
-
-    if (videoFile) {
-      const videoData = new FormData();
-      videoData.append("file", videoFile);
-      videoData.append("upload_preset", "estate");
-      videoData.append("cloud_name", "dgupi3gce");
-
-      try {
-        const cloudinaryRes = await fetch(
-          "https://api.cloudinary.com/v1_1/dgupi3gce/video/upload",
-          {
-            method: "POST",
-            body: videoData,
-          }
-        );
-        const cloudinaryData = await cloudinaryRes.json();
-        const videoUrl = cloudinaryData?.url;
-
-        if (videoUrl) {
-          updateData.video = videoUrl;
-        }
-      } catch (error) {
-        console.error("Error uploading video:", error);
-        alert("An error occurred while uploading the video.");
-        return;
-      }
-    }
 
     try {
       const apiRes = await fetch(
@@ -90,7 +66,6 @@ const FirstSection = () => {
     }
   };
 
-
   return (
     <div className="p-5">
       <form onSubmit={handleUpdate}>
@@ -98,9 +73,46 @@ const FirstSection = () => {
           <CardHeader>
             <CardTitle>Sec 1 content</CardTitle>
           </CardHeader>
-          <CardContent className="flex justify-between gap-5">
-            <div className="w-full space-y-3">
-              <label htmlFor="" className="flex flex-col gap-y-1">
+          <CardContent className="flex flex-col gap-5">
+            <div className="">
+              <div className="w-full">
+                <span className="text-sm font-medium opacity-90">
+                  Background Video
+                </span>
+
+                <video className="object-cover rounded" autoPlay muted loop>
+                  <source src={input.video} type="video/webm" />
+                </video>
+                <input
+                  type="file"
+                  accept="video/*"
+                  name="video"
+                  onChange={handleFileChange}
+                />
+                {isUploading && (
+                  <div
+                    style={{
+                      width: "100%",
+                      background: "#f3f3f3",
+                      height: "10px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${progress}%`,
+                        background: "green",
+                        height: "100%",
+                        borderRadius: "5px",
+                        transition: "width 0.3s ease",
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="w-full flex items-center justify-between gap-5">
+              <label htmlFor="" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Title</span>
                 <Textarea
                   name=""
@@ -112,7 +124,7 @@ const FirstSection = () => {
                   {input.title}
                 </Textarea>
               </label>
-              <label htmlFor="" className="flex flex-col gap-y-1">
+              <label htmlFor="" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Subtitle</span>
                 <Textarea
                   onChange={(e) =>
@@ -122,15 +134,6 @@ const FirstSection = () => {
                   {input.subtitle}
                 </Textarea>
               </label>
-            </div>
-            <div className="w-full">
-              <span className="text-sm font-medium opacity-90">
-                Background Video
-              </span>
-              <video className="object-cover rounded" autoPlay muted loop>
-                <source src={input.video} type="video/webm" />
-              </video>
-              <input type="file" name="video" />
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">

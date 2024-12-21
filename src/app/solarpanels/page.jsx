@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import VideoSlide from "../components/VideoSlide";
 import Image from "next/image";
 import ImageSlide from "../components/ImageSlide";
@@ -7,30 +7,44 @@ import Link from "next/link";
 import getAllPageData from "../lib/getAllPageData";
 import { useEffect } from "react";
 
-
-
-
 const page = async () => {
-
-  const allData = await getAllPageData(2); 
+  const allData = await getAllPageData(2);
   console.log(allData);
 
+  const firstSection = allData?.firstSection || [];
   const secondSection = allData?.secondSection || [];
-  console.log(secondSection);
-  
-  
-
+  const ThirdSection = allData?.ThirdSection || [];
+  const fourthSection = allData?.fourthSection || [];
+  const fifthSection = allData?.fifthSection || [];
+  const sixthSection = allData?.sixthSection || [];
+  const seventhSection = allData?.seventhSection || [];
+  const eighthSection = allData?.eighthSection || [];
+  const ninethSection = allData?.ninethSection || [];
+  const tenthSection = allData?.tenthSection || [];
+  console.log(
+    "first",
+    firstSection
+    // secondSection,
+    // ThirdSection,
+    // fourthSection,
+    // fifthSection,
+    // sixthSection,
+    // seventhSection,
+    // eighthSection,
+    // ninethSection,
+    // tenthSection
+  );
 
   // useEffect(() => {
   //     const fetchData = async () => {
   //       try {
-  //         const allData = await getAllPageData(2); 
+  //         const allData = await getAllPageData(2);
   //         console.log("All Data:", allData);
-  
+
   //         const tenthSection = allData?.tenthSection || [];
   //         console.log("Tenth Section Data:", tenthSection);
-  
-  //         setTenthSectionData(tenthSection); 
+
+  //         setTenthSectionData(tenthSection);
   //       } catch (err) {
   //         console.error("Error fetching data:", err.message);
   //         setError(err.message);
@@ -38,25 +52,24 @@ const page = async () => {
   //         setLoading(false);
   //       }
   //     };
-  
+
   //     fetchData();
   //   }, []);
-
 
   return (
     <>
       {/* sec 1 */}
       <div className="w-full h-screen relative">
         <video className="w-full h-full object-cover" autoPlay muted loop>
-          <source src="/videos/video1.webm" type="video/webm" />
+          <source src={firstSection?.video} type="video/webm" />
         </video>
         <div className="absolute top-0 left-0 bottom-0 right-0 flex flex-col items-center justify-between sm:my-16 my-10">
           <div className="text-center space-y-2 mt-24">
             <h1 className="xl:text-4xl text-2xl font-bold text-white">
-              Harness Solar Energy
+              {firstSection.title}
             </h1>
             <h1 className="text-[13px] font-semibold text-white">
-              Save Money, Power Your Home and Apartment Efficiently
+              {firstSection.subtitle}
             </h1>
           </div>
           <div className="flex max-sm:flex-col items-center justify-between gap-5 max-w-[544px] w-full sm:h-[40px] h-[100px] max-sm:px-5">
@@ -73,18 +86,20 @@ const page = async () => {
         </div>
       </div>
 
-
       {/* sec 2 */}
       <div className="text-center bg-white text-black sm:pt-[120px] pt-10 sm:px-[48px] px-5 pb-[40px] space-y-2">
         <h1 className="sm:text-2xl text-[22px] text-[#171A20] font-bold opacity-90">
           {secondSection.title}
         </h1>
         <p className="max-w-2xl mx-auto text-sm text-gray-700 font-medium opacity-90">
-         {secondSection.subtitle}
+          {secondSection.subtitle}
         </p>
       </div>
       {/* sec 3 */}
-      <div className="w-full h-screen bg-solarPanels2 bg-cover bg-center relative">
+      <div
+        className="w-full h-screen bg-cover bg-center relative"
+        style={{ backgroundImage: `url('${secondSection.photo}')` }}
+      >
         <div className="absolute top-0 left-0 w-full h-48 bg-gradient-to-b from-white to-transparent"></div>
       </div>
       {/* sec 4 */}

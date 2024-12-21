@@ -4,15 +4,10 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function AppSidebar() {
@@ -27,7 +22,9 @@ export default function AppSidebar() {
                 <SidebarMenuButton>Water</SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton>Solar Panels</SidebarMenuButton>
+                <Link href={"/dashboard/solarpanels"}>
+                  <SidebarMenuButton>Solar Panels</SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton>HVAC</SidebarMenuButton>
