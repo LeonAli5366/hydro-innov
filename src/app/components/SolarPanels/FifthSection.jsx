@@ -9,29 +9,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState, useEffect } from "react";
-import getFifthSectionData from "@/app/lib/fifthSectionData";
+import React, { useState } from "react";
+import getAllPageData from "@/app/lib/getAllPageData";
+import { toast } from "sonner";
+
+// Fetch data
+const allData = await getAllPageData(2);
+const fifthData = allData?.fifthSection || [];
+console.log(fifthData);
 
 const FifthSection = () => {
   const [input, setInput] = useState({
-    title: "",
-    subtitle: "",
-    photo: "",
+    title: fifthData.title,
+    subtitle:fifthData.subtitle,
+    photo: fifthData.photo,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const fifthData = await getFifthSectionData(1);
-      console.log(fifthData);
-      setInput({
-        title: fifthData.title || "",
-        subtitle: fifthData.subtitle || "",
-        photo: fifthData.photo || "",
-      });
-    };
-
-    fetchData();
-  }, []);
+  
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -41,7 +35,7 @@ const FifthSection = () => {
       title: input.title,
       subtitle: input.subtitle,
       photo: input.photo,
-      pageId: 1,
+      pageId: 2,
     };
 
     if (photoFile) {
@@ -66,7 +60,7 @@ const FifthSection = () => {
         }
       } catch (error) {
         console.error("Error uploading photo:", error);
-        alert("An error occurred while uploading the photo.");
+        toast.error("An error occurred while uploading the photo.");
         return;
       }
     }
@@ -86,13 +80,13 @@ const FifthSection = () => {
       const apiData = await apiRes.json();
 
       if (apiData.status === "Success") {
-        alert("Section updated successfully!");
+        toast.success("Section updated successfully!");
       } else {
-        alert("Failed to update Section.");
+        toast.error("Failed to update Section.");
       }
     } catch (error) {
       console.error("Error updating Section:", error);
-      alert("An error occurred while updating the Section.");
+      toast.error("An error occurred while updating the Section.");
     }
   };
 
@@ -104,7 +98,7 @@ const FifthSection = () => {
             <CardTitle>Section 5 Content</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-5">
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-2">
               <span className="text-sm font-medium opacity-90">
                 Background Image
               </span>
@@ -113,11 +107,11 @@ const FifthSection = () => {
                 alt="Section Background"
                 width={800}
                 height={500}
-                className="object-cover rounded"
+                className="max-h-[600px] h-full max-w-full w-full object-cover rounded"
               />
               <input type="file" name="photo" />
             </div>
-            <div className="flex justify-between gap-x-5 w-full">
+            <div className="flex items-center justify-between gap-5 w-full">
               <label htmlFor="" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Title</span>
                 <Textarea

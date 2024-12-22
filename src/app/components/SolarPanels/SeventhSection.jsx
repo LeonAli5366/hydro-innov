@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import getSeventhSectionData from "@/app/lib/seventhSectionData";
+import getAllPageData from "@/app/lib/getAllPageData";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,27 +11,19 @@ import {
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
+
+// Fetch data
+const allData = await getAllPageData(2);
+const seventhData = allData?.seventhSection || [];
+console.log(seventhData);
 
 const SeventhSection = () => {
   const [input, setInput] = useState({
-    title: "",
-    subtitle: "",
-    photo: "",
+    title: seventhData.title,
+    subtitle: seventhData.subtitle,
+    photo: seventhData.photo,
   });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const seventhData = await getSeventhSectionData(1);
-      console.log(seventhData);
-      setInput({
-        title: seventhData.title || "",
-        subtitle: seventhData.subtitle || "",
-        photo: seventhData.photo || "",
-      });
-    };
-
-    fetchData();
-  }, []);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -41,7 +33,7 @@ const SeventhSection = () => {
       title: input.title,
       subtitle: input.subtitle,
       photo: input.photo,
-      pageId: 1,
+      pageId: 2,
     };
 
     if (photoFile) {
@@ -66,14 +58,14 @@ const SeventhSection = () => {
         }
       } catch (error) {
         console.error("Error uploading photo:", error);
-        alert("An error occurred while uploading the photo.");
+        toast.error("An error occurred while uploading the photo.");
         return;
       }
     }
 
     try {
       const apiRes = await fetch(
-        `http://localhost:3000/api/dashboard/tesla/seventhSection?id=1`,
+        `http://localhost:3000/api/dashboard/tesla/seventhSection?id=2`,
         {
           method: "PUT",
           headers: {
@@ -86,13 +78,13 @@ const SeventhSection = () => {
       const apiData = await apiRes.json();
 
       if (apiData.status === "Success") {
-        alert("Section updated successfully!");
+        toast.success("Section updated successfully!");
       } else {
-        alert("Failed to update Section.");
+        toast.error("Failed to update Section.");
       }
     } catch (error) {
       console.error("Error updating Section:", error);
-      alert("An error occurred while updating the Section.");
+      toast.error("An error occurred while updating the Section.");
     }
   };
 
@@ -104,7 +96,7 @@ const SeventhSection = () => {
             <CardTitle>Section 7 Content</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-5">
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-2">
               <span className="text-sm font-medium opacity-90">
                 Background Image
               </span>
@@ -113,11 +105,11 @@ const SeventhSection = () => {
                 alt="Section Background"
                 width={800}
                 height={500}
-                className="object-cover rounded"
+                className="max-h-[600px] h-full max-w-full w-full object-cover rounded"
               />
               <input type="file" name="photo" />
             </div>
-            <div className="flex justify-between gap-x-5 w-full">
+            <div className="flex items-center justify-between gap-5 w-full">
               <label htmlFor="" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Title</span>
                 <Textarea

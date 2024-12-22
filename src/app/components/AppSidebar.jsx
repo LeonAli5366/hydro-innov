@@ -22,9 +22,9 @@ export default function AppSidebar() {
                 <SidebarMenuButton>Water</SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <Link href={"/dashboard/solarpanels"}>
-                  <SidebarMenuButton>Solar Panels</SidebarMenuButton>
-                </Link>
+                <SidebarMenuButton>
+                  <Link href={"/dashboard/solarpanels"}>Solar Panels</Link>
+                </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton>HVAC</SidebarMenuButton>

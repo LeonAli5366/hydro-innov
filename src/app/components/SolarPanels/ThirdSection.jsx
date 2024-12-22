@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import getThirdSectionData from "@/app/lib/thirdSectionData";
+import getAllPageData from "@/app/lib/getAllPageData";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,7 +12,9 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import React, { useState } from "react";
 
-const thirdData = await getThirdSectionData(1);
+// Fetch data
+const allData = await getAllPageData(2);
+const thirdData = allData?.thirdSection;
 console.log(thirdData);
 
 const ThirdSection = () => {
@@ -25,7 +27,6 @@ const ThirdSection = () => {
     subtitlthree: thirdData.subtitlthree,
   });
 
-  console.log(input);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -37,14 +38,14 @@ const ThirdSection = () => {
       subtitle2: input.subtitle2,
       titlthree: input.titlthree,
       subtitlthree: input.subtitlthree,
-      pageId: 1,
+      pageId: 2,
     };
 
     
 
     try {
       const apiRes = await fetch(
-        `http://localhost:3000/api/dashboard/tesla/thirdSection?id=1`,
+        `http://localhost:3000/api/dashboard/tesla/thirdSection?id=2`,
         {
           method: "PUT",
           headers: {

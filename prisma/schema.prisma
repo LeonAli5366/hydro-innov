@@ -43,7 +43,7 @@ model page {
   slug           String          @unique
   firstSection   firstSection?
   secondSection  secondSection?
-  thirdSection   thirdSection[]
+  thirdSection   thirdSection?
   fourthSection  fourthSection[]
   fifthSection   fifthSection?
   sixthSection   sixthSection[]
@@ -95,7 +95,7 @@ model thirdSection {
   titlthree    String
   subtitlthree String
 
-  pageId Int
+  pageId Int  @unique
   page   page @relation(fields: [pageId], references: [id])
 
   createdAt DateTime @default(now()) @db.Timestamp(0)

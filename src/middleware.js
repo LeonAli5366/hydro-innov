@@ -1,26 +1,31 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+// import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isProtectedRoute = createRouteMatcher(["/dashboard"]);
+// const isProtectedRoute = createRouteMatcher(["/dashboard"]);
 
-export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) await auth.protect();
+// export default clerkMiddleware(async (auth, req) => {
+//   if (isProtectedRoute(req)) await auth.protect();
 
-  if (req.nextUrl.pathname.startsWith("/api/dashboard")) {
+// });
+
+
+export default function middleware(req) {
+  // Only run the middleware for API routes (excluding static assets)
+  if (req.nextUrl.pathname.startsWith("/api")) {
+    // Here you can add more logic like authentication, logging, etc.
+    // For now, we just pass the request through.
     return NextResponse.next();
   }
 
-  if (req.nextUrl.pathname.startsWith("/api/user")) {
-    return NextResponse.next();
-  }
+  // For all other requests, continue without changes
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
-    "/(api|trpc)(.*)",
+    // Always run for API routes, except for static assets and Next.js internals
+    "/api/:path*", // Match all API routes
+    "/((?!_next|[^?]*\\.(?:html?|css|js|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)", // Skip static files
   ],
 };
+

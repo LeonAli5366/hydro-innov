@@ -54,10 +54,13 @@ export async function PUT(req) {
   const prisma = new PrismaClient();
 
   try {
-    const { pageId, fourthSectionUpdates } = await req.json();
+    let { searchParams } = new URL(req.url);
+    let fourth_id = searchParams.get("id");
+    const { pageId, tag, desc, video } = await req.json();
 
     const fourthSection = await prisma.fourthSection.findFirst({
       where: {
+        id: parseInt(fourth_id),
         pageId: parseInt(pageId),
       },
     });
@@ -72,7 +75,11 @@ export async function PUT(req) {
     // Update the fourthSection
     const updatedfourthSection = await prisma.fourthSection.update({
       where: { id: fourthSection.id },
-      data: fourthSectionUpdates,
+      data: {
+        tag,
+        desc,
+        video,
+      },
     });
 
     return NextResponse.json({

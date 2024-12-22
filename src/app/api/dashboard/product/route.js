@@ -1,4 +1,3 @@
-
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
@@ -20,10 +19,6 @@ export async function POST(req, res) {
   }
 }
 
-
-
-
-
 // GET ALL PRODUCT
 export async function GET(req, res) {
   try {
@@ -32,7 +27,7 @@ export async function GET(req, res) {
     // Fetch all orders with related product details
     const result = await prisma.orders.findMany({
       include: {
-        product: true, // Include related product details
+        product: true, 
       },
     });
 
@@ -42,7 +37,6 @@ export async function GET(req, res) {
     return NextResponse.json({ status: "Fail", data: "no data" });
   }
 }
-
 
 // DELETE PRODUCT
 export async function DELETE(req, res) {
@@ -64,7 +58,7 @@ export async function DELETE(req, res) {
 // UPDATE PRODUCT
 export async function PUT(req, res) {
   try {
-    let reqBody = await req.json();
+    let { title, subtitle, photo } = await req.json();
 
     let { searchParams } = new URL(req.url);
     let product_id = searchParams.get("id");
@@ -75,7 +69,11 @@ export async function PUT(req, res) {
       where: {
         id: parseInt(product_id),
       },
-      data: reqBody,
+      data: {
+        title,
+        subtitle,
+        photo,
+      },
     });
 
     return NextResponse.json({ status: "Success", data: result });

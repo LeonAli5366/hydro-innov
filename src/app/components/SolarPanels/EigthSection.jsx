@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import getEightSectionData from "@/app/lib/eigthSectionData";
+import getAllPageData from "@/app/lib/getAllPageData";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,38 +11,31 @@ import {
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
+
+
+// Fetch data
+const allData = await getAllPageData(2);
+const eigthData = allData?.eighthSection || [];
+console.log(eigthData);
 
 const EigthSection = () => {
   const [input, setInput] = useState({
-    title: "",
-    subtitle: "",
-    titleone: "",
-    subtitleone: "",
-    titletwo: "",
-    subtitletwo: "",
-    titlethree: "",
-    subtitlethree: "",
-    photo: "",
+    title: eigthData.title,
+    subtitle: eigthData.subtitle,
+
+    titleone: eigthData.titleone,
+    subtitleone: eigthData.subtitleone,
+
+    titletwo: eigthData.titletwo,
+    subtitletwo: eigthData.subtitletwo,
+
+    titlethree: eigthData.titlethree,
+    subtitlethree: eigthData.subtitlethree,
+    photo: eigthData.photo,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const eightData = await getEightSectionData(1);
-      setInput({
-        title: eightData.title || "",
-        subtitle: eightData.subtitle || "",
-        titleone: eightData.titleone || "",
-        subtitleone: eightData.subtitleone || "",
-        titletwo: eightData.titletwo || "",
-        subtitletwo: eightData.subtitletwo || "",
-        titlethree: eightData.titlethree || "",
-        subtitlethree: eightData.subtitlethree || "",
-        photo: eightData.photo || "",
-      });
-    };
 
-    fetchData();
-  }, []);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -58,7 +51,7 @@ const EigthSection = () => {
       subtitletwo: input.subtitletwo,
       titlethree: input.titlethree,
       subtitlethree: input.subtitlethree,
-      pageId: 1,
+      pageId: 2,
       photo: input.photo, 
     };
 
@@ -87,7 +80,7 @@ const EigthSection = () => {
         }
       } catch (error) {
         console.error("Error uploading photo:", error);
-        alert("An error occurred while uploading the photo.");
+        toast.error("An error occurred while uploading the photo.");
         return;
       }
     }
@@ -97,7 +90,7 @@ const EigthSection = () => {
 
     try {
       const apiRes = await fetch(
-        `http://localhost:3000/api/dashboard/tesla/eighthSection?id=1`,
+        `http://localhost:3000/api/dashboard/tesla/eighthSection?id=2`,
         {
           method: "PUT",
           headers: {
@@ -110,13 +103,13 @@ const EigthSection = () => {
       const apiData = await apiRes.json();
 
       if (apiData.status === "Success") {
-        alert("Section updated successfully!");
+        toast.success("Section updated successfully!");
       } else {
-        alert("Failed to update Section.");
+        toast.error("Failed to update Section.");
       }
     } catch (error) {
       console.error("Error updating Section:", error);
-      alert("An error occurred while updating the Section.");
+      toast.error("An error occurred while updating the Section.");
     }
   };
 
@@ -156,7 +149,7 @@ const EigthSection = () => {
                   alt="Background Photo"
                   width={800}
                   height={500}
-                  className="object-cover rounded"
+                  className="max-h-[600px] h-full max-w-full w-full object-cover rounded"
                 />
               )}
               <input type="file" name="photo" className="mt-3" />

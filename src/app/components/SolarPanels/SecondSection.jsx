@@ -9,31 +9,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState, useEffect } from "react";
-import getSecondSectionData from "@/app/lib/secondSectionData";
+import React, { useState } from "react";
+import getAllPageData from "@/app/lib/getAllPageData";
+import { toast } from "sonner";
+
+// Fetch data
+const allData = await getAllPageData(2);
+const secondData = allData?.secondSection || [];
+console.log(secondData);
 
 const SecondSection = () => {
   const [input, setInput] = useState({
-    title: "",
-    subtitle: "",
-    photo: "",
+    title: secondData.title,
+    subtitle: secondData.subtitle,
+    photo: secondData.photo,
   });
-
-  console.log(input);
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      const secondData = await getSecondSectionData(1);
-      console.log(secondData);
-      setInput({
-        title: secondData.title || "",
-        subtitle: secondData.subtitle || "",
-        photo: secondData.photo || "",
-      });
-    };
-
-    fetchData();
-  }, []);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -77,7 +67,7 @@ const SecondSection = () => {
 
     try {
       const apiRes = await fetch(
-        `http://localhost:3000/api/dashboard/tesla/secondSection?id=1`,
+        `http://localhost:3000/api/dashboard/tesla/secondSection?id=2`,
         {
           method: "PUT",
           headers: {
@@ -90,13 +80,13 @@ const SecondSection = () => {
       const apiData = await apiRes.json();
 
       if (apiData.status === "Success") {
-        alert("Section updated successfully!");
+        toast.success("Section updated successfully!");
       } else {
-        alert("Failed to update Section.");
+        toast.error("Failed to update Section.");
       }
     } catch (error) {
       console.error("Error updating Section:", error);
-      alert("An error occurred while updating the Section.");
+      toast.error("An error occurred while updating the Section.");
     }
   };
 
@@ -107,9 +97,24 @@ const SecondSection = () => {
           <CardHeader>
             <CardTitle>Section 2 content</CardTitle>
           </CardHeader>
-          <CardContent className="flex justify-between gap-5">
-            <div className="w-full space-y-3">
-              <label htmlFor="title" className="flex flex-col gap-y-1">
+          <CardContent className="flex flex-col gap-5">
+            <div className="w-full flex flex-col gap-2">
+              <span className="text-sm font-medium opacity-90">
+                Background Photo
+              </span>
+              {input.photo && (
+                <img
+                  src={input.photo}
+                  alt="Background Photo"
+                  width={800}
+                  height={500}
+                  className="object-cover rounded max-h-[600px] max-w-full w-full h-full"
+                />
+              )}
+              <input type="file" name="photo" />
+            </div>
+            <div className="w-full flex items-center justify-between gap-5">
+              <label htmlFor="title" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Title</span>
                 <Textarea
                   name="title"
@@ -120,7 +125,10 @@ const SecondSection = () => {
                   }
                 />
               </label>
-              <label htmlFor="subtitle" className="flex flex-col gap-y-1">
+              <label
+                htmlFor="subtitle"
+                className="flex flex-col gap-y-1 w-full"
+              >
                 <span className="text-sm font-medium opacity-90">Subtitle</span>
                 <Textarea
                   name="subtitle"
@@ -131,21 +139,6 @@ const SecondSection = () => {
                   }
                 />
               </label>
-            </div>
-            <div className="w-full">
-              <span className="text-sm font-medium opacity-90">
-                Background Photo
-              </span>
-              {input.photo && (
-                <img
-                  src={input.photo}
-                  alt="Background Photo"
-                  width={800}
-                  height={500}
-                  className="object-cover rounded"
-                />
-              )}
-              <input type="file" name="photo" className="mt-3" />
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">

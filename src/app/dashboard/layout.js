@@ -8,7 +8,7 @@ export default function RootLayout({ children }) {
         <SidebarProvider>
           <AppSidebar />
           <main className="w-full">
-            <div className="w-full flex items-center justify-between">
+            <div className="w-full flex items-center justify-between h-10 bg-white shadow px-5">
               <SidebarTrigger />
             </div>
             {children}

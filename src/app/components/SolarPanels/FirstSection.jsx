@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-async-client-component */
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-import getFirstSectionData from "@/app/lib/firstSectionData";
+import getAllPageData from "@/app/lib/getAllPageData";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,38 +12,60 @@ import {
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
-const fisrtData = await getFirstSectionData(1);
-console.log(fisrtData);
+// Fetch data
+const allData = await getAllPageData(2);
+const fisrtData = allData?.firstSection || [];
 
 const FirstSection = () => {
   const [input, setinput] = useState({
     title: fisrtData.title,
-    subtitle: fisrtData.title,
+    subtitle: fisrtData.subtitle,
     video: fisrtData.video,
   });
-
-  const [progress, setProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
-  const [videoUrl, setVideoUrl] = useState("");
-
-  
 
   const handleUpdate = async (e) => {
     e.preventDefault();
 
+    const videoFile = e.target.video?.files[0];
     const updateData = {
       title: input.title,
       subtitle: input.subtitle,
-      video: videoUrl,
-      pageId: 1,
+      video: input.video,
+      pageId: 2,
     };
 
-    console.log(updateData);
+    if (videoFile) {
+      const videoData = new FormData();
+      videoData.append("file", videoFile);
+      videoData.append("upload_preset", "estate");
+      videoData.append("cloud_name", "dgupi3gce");
+
+      try {
+        const cloudinaryRes = await fetch(
+          "https://api.cloudinary.com/v1_1/dgupi3gce/video/upload",
+          {
+            method: "POST",
+            body: videoData,
+          }
+        );
+        const cloudinaryData = await cloudinaryRes.json();
+        const videoUrl = cloudinaryData?.url;
+
+        if (videoUrl) {
+          updateData.video = videoUrl;
+        }
+      } catch (error) {
+        console.error("Error uploading video:", error);
+        alert("An error occurred while uploading the video.");
+        return;
+      }
+    }
 
     try {
       const apiRes = await fetch(
-        `http://localhost:3000/api/dashboard/tesla/firstSection?id=1`,
+        `http://localhost:3000/api/dashboard/tesla/firstSection?id=2`,
         {
           method: "PUT",
           headers: {
@@ -56,13 +78,13 @@ const FirstSection = () => {
       const apiData = await apiRes.json();
 
       if (apiData.status === "Success") {
-        alert("Section updated successfully!");
+        toast.success("Section updated successfully!");
       } else {
-        alert("Failed to update Section.");
+        toast.error("Failed to update Section.");
       }
     } catch (error) {
       console.error("Error updating Section:", error);
-      alert("An error occurred while updating the Section.");
+      toast.error("An error occurred while updating the Section.");
     }
   };
 
@@ -74,44 +96,21 @@ const FirstSection = () => {
             <CardTitle>Sec 1 content</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-5">
-            <div className="">
-              <div className="w-full">
-                <span className="text-sm font-medium opacity-90">
-                  Background Video
-                </span>
-
-                <video className="object-cover rounded" autoPlay muted loop>
-                  <source src={input.video} type="video/webm" />
-                </video>
-                <input
-                  type="file"
-                  accept="video/*"
-                  name="video"
-                  onChange={handleFileChange}
-                />
-                {isUploading && (
-                  <div
-                    style={{
-                      width: "100%",
-                      background: "#f3f3f3",
-                      height: "10px",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: `${progress}%`,
-                        background: "green",
-                        height: "100%",
-                        borderRadius: "5px",
-                        transition: "width 0.3s ease",
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
+            <div className="w-full flex flex-col gap-2">
+              <span className="text-sm font-medium opacity-90">
+                Background Video
+              </span>
+              <video
+                className="sm:max-h-[600px] w-full sm:h-full object-cover rounded"
+                autoPlay
+                muted
+                loop
+              >
+                <source src={input?.video} type="video/webm" />
+              </video>
+              <input type="file" name="video" />
             </div>
-            <div className="w-full flex items-center justify-between gap-5">
+            <div className="w-full flex max-sm:flex-col sm:items-center sm:justify-between gap-5">
               <label htmlFor="" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Title</span>
                 <Textarea
