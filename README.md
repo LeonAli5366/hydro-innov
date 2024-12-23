@@ -14,7 +14,7 @@ pnpm dev
 bun dev
 ```
 
-Open [https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app](https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 

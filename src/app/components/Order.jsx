@@ -26,7 +26,7 @@ const Order = () => {
     const fetchProductData = async () => {
       try {
         const response = await fetch(
-          "https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/dashboard/product"
+          `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/product`
         );
 
         if (!response.ok) {
@@ -82,13 +82,16 @@ const Order = () => {
     setLoading(true); // Start loading spinner
 
     try {
-      const response = await fetch("https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Order submission failed");
@@ -184,8 +187,7 @@ const Order = () => {
                   <div
                     key={product.id}
                     className={`flex flex-col rounded transition-all gap-3 duration-300 ease-in-out border ${
-                      productId === product.id &&
-                      "border-blue-600"
+                      productId === product.id && "border-blue-600"
                     }`}
                     onClick={() => setProductId(product.id)} // Set product ID to 1
                   >

@@ -111,7 +111,7 @@ export function DataTable() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await fetch("https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/users");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`);
         const jsonData = await res.json();
         if (jsonData.status === "Success") {
           setUserData(jsonData.data); // Set user data if successful
@@ -210,7 +210,10 @@ export function DataTable() {
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id} className="text-left text-nowrap">
+                    <TableHead
+                      key={header.id}
+                      className="text-left text-nowrap"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(

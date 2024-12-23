@@ -65,7 +65,7 @@ const FirstSection = () => {
 
     try {
       const apiRes = await fetch(
-        `https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/dashboard/tesla/firstSection?id=1`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/tesla/firstSection?id=1`,
         {
           method: "PUT",
           headers: {

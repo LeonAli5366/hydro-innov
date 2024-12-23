@@ -10,7 +10,6 @@ const fourthData = allData?.fourthSection || [];
 const fourthObject = fourthData?.[2];
 console.log(fourthObject);
 
-
 const SubThirdSection = () => {
   const [input, setInput] = useState({
     tag: fourthObject?.tag || "",
@@ -73,12 +72,12 @@ const SubThirdSection = () => {
       pageId: 3,
     };
 
-    console.log("Updating data:", updateData); 
+    console.log("Updating data:", updateData);
 
     // Send data to the API
     try {
       const response = await fetch(
-        "https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/dashboard/tesla/fourthSection?id=9",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/tesla/fourthSection?id=9`,
         {
           method: "PUT",
           headers: {
@@ -90,7 +89,7 @@ const SubThirdSection = () => {
 
       if (response.ok) {
         alert("Data updated successfully!");
-        setInput({ ...input, video: updatedVideoUrl }); 
+        setInput({ ...input, video: updatedVideoUrl });
       } else {
         const errorText = await response.text();
         console.error("API Error:", errorText);
@@ -108,7 +107,9 @@ const SubThirdSection = () => {
         <div className="flex flex-col gap-y-3 w-full">
           {/* Video preview */}
           <div className="w-full">
-            <span className="text-sm font-medium opacity-90">Background Video</span>
+            <span className="text-sm font-medium opacity-90">
+              Background Video
+            </span>
             {input.video && (
               <video className="object-cover rounded" autoPlay muted loop>
                 <source src={input.video} type="video/mp4" />
@@ -125,11 +126,7 @@ const SubThirdSection = () => {
           {/* Tag */}
           <label htmlFor="tag" className="flex flex-col gap-y-1 w-full">
             <span className="text-sm font-medium opacity-90">Tag</span>
-            <Textarea
-              id="tag"
-              value={input.tag}
-              onChange={handleInputChange}
-            />
+            <Textarea id="tag" value={input.tag} onChange={handleInputChange} />
           </label>
 
           {/* Description */}
@@ -149,5 +146,3 @@ const SubThirdSection = () => {
 };
 
 export default SubThirdSection;
-
-
