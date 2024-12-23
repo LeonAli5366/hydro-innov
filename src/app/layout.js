@@ -1,5 +1,4 @@
 // import { ClerkProvider } from "@clerk/nextjs";
-import Header from "./components/Header";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
