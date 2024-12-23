@@ -26,7 +26,7 @@ const Order = () => {
     const fetchProductData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/dashboard/product"
+          "https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/dashboard/product"
         );
 
         if (!response.ok) {
@@ -82,7 +82,7 @@ const Order = () => {
     setLoading(true); // Start loading spinner
 
     try {
-      const response = await fetch("http://localhost:3000/api/users", {
+      const response = await fetch("https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

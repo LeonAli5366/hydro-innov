@@ -111,7 +111,7 @@ export function DataTable() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/users");
+        const res = await fetch("https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/users");
         const jsonData = await res.json();
         if (jsonData.status === "Success") {
           setUserData(jsonData.data); // Set user data if successful

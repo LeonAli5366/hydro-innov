@@ -15,7 +15,7 @@ const Page = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/dashboard/product");
+        const res = await fetch("https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/dashboard/product");
         const jsonData = await res.json();
 
         if (jsonData.status === "Success") {

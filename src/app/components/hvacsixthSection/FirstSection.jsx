@@ -71,7 +71,7 @@ const FirstSection = () => {
     // Update the data via API
     try {
       const response = await fetch(
-        "http://localhost:3000/api/dashboard/tesla/sixthSection?id=9",
+        "https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/dashboard/tesla/sixthSection?id=9",
         {
           method: "PUT",
           headers: {

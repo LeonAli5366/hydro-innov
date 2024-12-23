@@ -76,7 +76,7 @@ const SubSecondSection = () => {
     // Send data to the API
     try {
       const response = await fetch(
-        "http://localhost:3000/api/dashboard/tesla/fourthSection?id=5",
+        "https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/dashboard/tesla/fourthSection?id=5",
         {
           method: "PUT",
           headers: {

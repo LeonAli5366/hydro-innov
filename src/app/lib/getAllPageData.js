@@ -5,7 +5,7 @@ export default async function getAllPageData(pageId) {
     }
   
     try {
-      const res = await fetch(`http://localhost:3000/api/dashboard/tesla/page?id=${pageId}`, {
+      const res = await fetch(`https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/dashboard/tesla/page?id=${pageId}`, {
         next: {
           revalidate: 60,
         },

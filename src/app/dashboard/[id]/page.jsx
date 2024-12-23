@@ -26,7 +26,7 @@ const SingleProduct = () => {
       const fetchProduct = async () => {
         try {
           const res = await fetch(
-            `http://localhost:3000/api/dashboard/product?id=${params.id}`
+            `https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/dashboard/product?id=${params.id}`
           );
           const jsonData = await res.json();
 
@@ -89,7 +89,7 @@ const SingleProduct = () => {
   // Update product details
   const updateProduct = async (id, updatedData) => {
     const res = await fetch(
-      `http://localhost:3000/api/dashboard/product?id=${id}`,
+      `https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/dashboard/product?id=${id}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

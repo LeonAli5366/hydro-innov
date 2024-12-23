@@ -97,7 +97,7 @@ const NinethSection = () => {
     // Send the update to the API
     try {
       const apiRes = await fetch(
-        "http://localhost:3000/api/dashboard/tesla/ninethSection?id=2",
+        "https://hydro-innov-6gkn-hkxr87350-leonali5366s-projects.vercel.app/api/dashboard/tesla/ninethSection?id=2",
         {
           method: "PUT",
           headers: {
