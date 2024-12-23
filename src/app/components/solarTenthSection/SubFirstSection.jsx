@@ -40,7 +40,10 @@ const SubFirstSection = () => {
     const file = e.target.files[0];
     if (file) setPhotoFile(file);
   };
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
   // Handle update
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -90,7 +93,7 @@ const SubFirstSection = () => {
     // Update the data via API
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/tesla/tenthSection?id=4`,
+        `${apiUrl}/api/dashboard/tesla/tenthSection?id=4`,
         {
           method: "PUT",
           headers: {

@@ -19,15 +19,17 @@ const Order = () => {
 
   // State to store product data
   const [products, setProducts] = useState([]);
-  console.log(products);
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
 
   // Fetch product data when the component mounts
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/product`
-        );
+        const response = await fetch(`${apiUrl}/api/dashboard/product`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch product data");
@@ -43,7 +45,7 @@ const Order = () => {
     };
 
     fetchProductData();
-  }, []);
+  }, [apiUrl]);
 
   // State to manage form step
   const [step, setStep] = useState(1);
@@ -82,16 +84,13 @@ const Order = () => {
     setLoading(true); // Start loading spinner
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/users`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orderData),
-        }
-      );
+      const response = await fetch(`${apiUrl}/api/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
 
       if (!response.ok) {
         throw new Error("Order submission failed");

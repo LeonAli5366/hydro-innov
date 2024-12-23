@@ -47,7 +47,10 @@ const SecondSection = () => {
 
     fetchData();
   }, []); // Empty array means it runs only once when the component mounts
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -90,7 +93,7 @@ const SecondSection = () => {
     // Update section in the backend
     try {
       const apiRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/tesla/secondSection?id=2`,
+        `${apiUrl}/api/dashboard/tesla/secondSection?id=2`,
         {
           method: "PUT",
           headers: {

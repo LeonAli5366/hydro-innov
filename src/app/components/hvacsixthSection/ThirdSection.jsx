@@ -26,7 +26,10 @@ const ThirdSection = () => {
     const file = e.target.files[0];
     if (file) setPhotoFile(file);
   };
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
   // Handle update
   const handleUpdate = async () => {
     let updatedPhotoUrl = input.photo;
@@ -71,7 +74,7 @@ const ThirdSection = () => {
     // Update the data via API
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/tesla/sixthSection?id=11`,
+        `${apiUrl}/api/dashboard/tesla/sixthSection?id=11`,
         {
           method: "PUT",
           headers: {

@@ -10,7 +10,6 @@ const fourthData = allData?.fourthSection || [];
 const fourthObject = fourthData?.[0];
 console.log(fourthObject);
 
-
 const SubFirstSection = () => {
   const [input, setInput] = useState({
     tag: fourthObject?.tag || "",
@@ -31,6 +30,11 @@ const SubFirstSection = () => {
     const { id, value } = e.target;
     setInput((prev) => ({ ...prev, [id]: value }));
   };
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
 
   // Handle update
   const handleUpdate = async () => {
@@ -73,12 +77,12 @@ const SubFirstSection = () => {
       pageId: 3,
     };
 
-    console.log("Updating data:", updateData); 
+    console.log("Updating data:", updateData);
 
     // Send data to the API
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/tesla/fourthSection?id=7`,
+        `${apiUrl}/api/dashboard/tesla/fourthSection?id=7`,
         {
           method: "PUT",
           headers: {
@@ -90,7 +94,7 @@ const SubFirstSection = () => {
 
       if (response.ok) {
         alert("Data updated successfully!");
-        setInput({ ...input, video: updatedVideoUrl }); 
+        setInput({ ...input, video: updatedVideoUrl });
       } else {
         const errorText = await response.text();
         console.error("API Error:", errorText);
@@ -108,7 +112,9 @@ const SubFirstSection = () => {
         <div className="flex flex-col gap-y-3 w-full">
           {/* Video preview */}
           <div className="w-full">
-            <span className="text-sm font-medium opacity-90">Background Video</span>
+            <span className="text-sm font-medium opacity-90">
+              Background Video
+            </span>
             {input.video && (
               <video className="object-cover rounded" autoPlay muted loop>
                 <source src={input.video} type="video/mp4" />
@@ -125,11 +131,7 @@ const SubFirstSection = () => {
           {/* Tag */}
           <label htmlFor="tag" className="flex flex-col gap-y-1 w-full">
             <span className="text-sm font-medium opacity-90">Tag</span>
-            <Textarea
-              id="tag"
-              value={input.tag}
-              onChange={handleInputChange}
-            />
+            <Textarea id="tag" value={input.tag} onChange={handleInputChange} />
           </label>
 
           {/* Description */}

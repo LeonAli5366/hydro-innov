@@ -52,7 +52,10 @@ const SubFirstSection = () => {
     const { id, value } = e.target;
     setInput((prev) => ({ ...prev, [id]: value }));
   };
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
   // Handle update
   const handleUpdate = async () => {
     let updatedVideoUrl = input.video;
@@ -97,7 +100,7 @@ const SubFirstSection = () => {
     // Send data to the API
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/tesla/fourthSection?id=1`,
+        `${apiUrl}/api/dashboard/tesla/fourthSection?id=1`,
         {
           method: "PUT",
           headers: {

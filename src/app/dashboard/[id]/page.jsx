@@ -19,14 +19,17 @@ const SingleProduct = () => {
     photo: "",
   });
   const [photoFile, setPhotoFile] = useState(null);
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
   // Fetch product on initial load
   useEffect(() => {
     if (params?.id) {
       const fetchProduct = async () => {
         try {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/product?id=${params.id}`
+            `${apiUrl}/api/dashboard/product?id=${params.id}`
           );
           const jsonData = await res.json();
 
@@ -50,7 +53,7 @@ const SingleProduct = () => {
 
       fetchProduct();
     }
-  }, [params?.id]);
+  }, [params?.id, apiUrl]);
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -88,14 +91,11 @@ const SingleProduct = () => {
 
   // Update product details
   const updateProduct = async (id, updatedData) => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/product?id=${id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedData),
-      }
-    );
+    const res = await fetch(`${apiUrl}/api/dashboard/product?id=${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedData),
+    });
 
     if (!res.ok) {
       throw new Error("Failed to update product");

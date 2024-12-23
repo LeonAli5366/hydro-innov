@@ -108,10 +108,15 @@ export function DataTable() {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`);
+        const res = await fetch(`${apiUrl}/api/users`);
         const jsonData = await res.json();
         if (jsonData.status === "Success") {
           setUserData(jsonData.data); // Set user data if successful

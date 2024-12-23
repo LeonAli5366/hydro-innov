@@ -11,11 +11,16 @@ const Page = () => {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
+
   // Fetch products directly inside the component
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/product`);
+        const res = await fetch(`${apiUrl}/api/dashboard/product`);
         const jsonData = await res.json();
 
         if (jsonData.status === "Success") {

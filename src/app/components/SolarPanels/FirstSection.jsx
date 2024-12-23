@@ -46,7 +46,10 @@ const FirstSection = () => {
 
     fetchData(); // Call the async function inside useEffect
   }, []); // Empty dependency array ensures this runs only once on mount
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -87,7 +90,7 @@ const FirstSection = () => {
 
     try {
       const apiRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/tesla/firstSection?id=2`,
+        `${apiUrl}/api/dashboard/tesla/firstSection?id=2`,
         {
           method: "PUT",
           headers: {

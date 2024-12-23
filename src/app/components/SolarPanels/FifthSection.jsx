@@ -44,7 +44,10 @@ const FifthSection = () => {
 
     fetchData();
   }, []); // Fetch data when the component mounts
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
   // Handle form submit to update data
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -86,7 +89,7 @@ const FifthSection = () => {
 
     try {
       const apiRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/tesla/fifthSection?id=1`,
+        `${apiUrl}/api/dashboard/tesla/fifthSection?id=1`,
         {
           method: "PUT",
           headers: {

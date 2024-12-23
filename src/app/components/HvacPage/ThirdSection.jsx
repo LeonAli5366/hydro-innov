@@ -25,7 +25,10 @@ const ThirdSection = () => {
     titlthree: thirdData.titlthree,
     subtitlthree: thirdData.subtitlthree,
   });
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -41,7 +44,7 @@ const ThirdSection = () => {
 
     try {
       const apiRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/tesla/thirdSection?id=3`,
+        `${apiUrl}/api/dashboard/tesla/thirdSection?id=3`,
         {
           method: "PUT",
           headers: {

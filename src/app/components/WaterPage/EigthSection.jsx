@@ -34,7 +34,10 @@ const EigthSection = () => {
   });
 
 
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -86,7 +89,7 @@ const EigthSection = () => {
 
     try {
       const apiRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/tesla/eighthSection?id=1`,
+        `${apiUrl}/api/dashboard/tesla/eighthSection?id=1`,
         {
           method: "PUT",
           headers: {

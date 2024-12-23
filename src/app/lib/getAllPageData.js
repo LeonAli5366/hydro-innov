@@ -3,9 +3,12 @@ export default async function getAllPageData(pageId) {
     if (!pageId || isNaN(pageId)) {
       throw new Error("Invalid or missing page ID");
     }
-  
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    if (!apiUrl) {
+      throw new Error("API URL is not defined!");
+    }
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/tesla/page?id=${pageId}`, {
+      const res = await fetch(`${apiUrl}/api/dashboard/tesla/page?id=${pageId}`, {
         next: {
           revalidate: 60,
         },
