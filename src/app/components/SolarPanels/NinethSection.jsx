@@ -15,17 +15,13 @@ import React, { useState } from "react";
 // Fetch data
 const allData = await getAllPageData(2);
 const ninethData = allData?.ninethSection || [];
-console.log(ninethData);
-
-
 
 const NinethSection = () => {
   const [input, setInput] = useState({
-    title:ninethData.title,
-    subtitle:ninethData.subtitle,
+    title: ninethData.title,
+    subtitle: ninethData.subtitle,
     photo: ninethData.photo,
   });
-
 
   const handleUpdate = async (e) => {
     e.preventDefault();

@@ -8,8 +8,8 @@ import React, { useState } from "react";
 // Fetch data
 const allData = await getAllPageData(3);
 const tenthData = allData?.tenthSection || [];
+const tenthObject = tenthData?.[0];
 
-const tenthObject = tenthData?.[6];
 
 const SubFirstSection = () => {
   // Sub section 1
@@ -65,7 +65,7 @@ const SubFirstSection = () => {
       title: input.title,
       subtitle: input.subtitle,
       photo: updatedPhotoUrl,
-      pageId: 1,
+      pageId: 3,
     };
 
     // Update the data via API

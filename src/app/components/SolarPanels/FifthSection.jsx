@@ -15,16 +15,13 @@ import getAllPageData from "@/app/lib/getAllPageData";
 // Fetch data
 const allData = await getAllPageData(2);
 const fifthData = allData?.fifthSection || [];
-console.log(fifthData);
 
 const FifthSection = () => {
   const [input, setInput] = useState({
     title: fifthData.title,
-    subtitle:fifthData.subtitle,
+    subtitle: fifthData.subtitle,
     photo: fifthData.photo,
   });
-
-  
 
   const handleUpdate = async (e) => {
     e.preventDefault();

@@ -8,7 +8,7 @@ import React, { useState } from "react";
 // Fetch data
 const allData = await getAllPageData(1);
 const sixthData = allData?.sixthSection || [];
-const secondObject = sixthData?.[5];
+const secondObject = sixthData?.[1];
 
 const SecondSection = () => {
 
@@ -97,7 +97,7 @@ const SecondSection = () => {
         <div className="flex flex-col gap-y-3 w-full">
           {/* background image 1 */}
           <div className="w-full">
-            <span className="text-sm font-medium opacity-90">Image 2</span>
+            <span className="text-sm font-medium opacity-90">Image 1</span>
             <Image
               src={input.photo}
               alt="img not found"
@@ -113,14 +113,14 @@ const SecondSection = () => {
             />
           </div>
           <label htmlFor="" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Title 2</span>
+            <span className="text-sm font-medium opacity-90">Title 1</span>
             <Textarea
               value={input.title}
               onChange={(e) => setInput({ ...input, title: e.target.value })}
             />
           </label>
           <label htmlFor="" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Subtitle 2</span>
+            <span className="text-sm font-medium opacity-90">Subtitle 1</span>
             <Textarea
               value={input.subtitle}
               onChange={(e) => setInput({ ...input, subtitle: e.target.value })}

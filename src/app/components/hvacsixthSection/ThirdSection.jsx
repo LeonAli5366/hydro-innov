@@ -9,7 +9,7 @@ import React, { useState } from "react";
 const allData = await getAllPageData(3);
 const sixthData = allData?.sixthSection || [];
 
-const firstObject = sixthData?.[10];
+const firstObject = sixthData?.[2];
 
 const ThirdSection = () => {
   // Sub section 1

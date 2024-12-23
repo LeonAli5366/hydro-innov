@@ -16,8 +16,6 @@ import React, { useState } from "react";
 // Fetch data
 const allData = await getAllPageData(3);
 const fisrtData = allData?.firstSection || [];
-console.log(fisrtData);
-
 
 const FirstSection = () => {
   const [input, setinput] = useState({

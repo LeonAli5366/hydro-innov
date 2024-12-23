@@ -12,7 +12,6 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import React, { useState } from "react";
 
-
 // Fetch data
 const allData = await getAllPageData(3);
 const eigthData = allData?.eighthSection || [];
@@ -33,8 +32,6 @@ const EigthSection = () => {
     photo: eigthData.photo,
   });
 
-
-
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -50,11 +47,10 @@ const EigthSection = () => {
       titlethree: input.titlethree,
       subtitlethree: input.subtitlethree,
       pageId: 3,
-      photo: input.photo, 
+      photo: input.photo,
     };
 
     console.log(updateData);
-    
 
     if (photoFile) {
       const photoData = new FormData();
@@ -82,9 +78,6 @@ const EigthSection = () => {
         return;
       }
     }
-
-
-    
 
     try {
       const apiRes = await fetch(
@@ -120,22 +113,33 @@ const EigthSection = () => {
           </CardHeader>
           <CardContent className="flex flex-col gap-5">
             <div className="grid grid-cols-2 gap-5">
-              {["title", "subtitle", "titleone", "subtitleone", "titletwo", "subtitletwo", "titlethree", "subtitlethree"].map(
-                (field, index) => (
-                  <label key={index} htmlFor={field} className="flex flex-col gap-y-1">
-                    <span className="text-sm font-medium opacity-90 capitalize">
-                      {field.replace(/([A-Z])/g, " $1")}
-                    </span>
-                    <Textarea
-                      id={field}
-                      value={input[field]}
-                      onChange={(e) =>
-                        setInput({ ...input, [field]: e.target.value })
-                      }
-                    />
-                  </label>
-                )
-              )}
+              {[
+                "title",
+                "subtitle",
+                "titleone",
+                "subtitleone",
+                "titletwo",
+                "subtitletwo",
+                "titlethree",
+                "subtitlethree",
+              ].map((field, index) => (
+                <label
+                  key={index}
+                  htmlFor={field}
+                  className="flex flex-col gap-y-1"
+                >
+                  <span className="text-sm font-medium opacity-90 capitalize">
+                    {field.replace(/([A-Z])/g, " $1")}
+                  </span>
+                  <Textarea
+                    id={field}
+                    value={input[field]}
+                    onChange={(e) =>
+                      setInput({ ...input, [field]: e.target.value })
+                    }
+                  />
+                </label>
+              ))}
             </div>
             <div className="flex flex-col gap-3">
               <span className="text-sm font-medium opacity-90">

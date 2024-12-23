@@ -9,14 +9,15 @@ import React, { useState } from "react";
 const allData = await getAllPageData(2);
 const tenthData = allData?.tenthSection || [];
 
-const tenthObject = tenthData?.[3];
+const firstObject = tenthData?.[0];
+
 
 const SubFirstSection = () => {
   // Sub section 1
   const [input, setInput] = useState({
-    title: tenthObject?.title || "",
-    subtitle: tenthObject?.subtitle || "",
-    photo: tenthObject?.photo || "",
+    title: firstObject?.title || "",
+    subtitle: firstObject?.subtitle || "",
+    photo: firstObject?.photo || "",
   });
 
   const [photoFile, setPhotoFile] = useState(null);
@@ -65,7 +66,7 @@ const SubFirstSection = () => {
       title: input.title,
       subtitle: input.subtitle,
       photo: updatedPhotoUrl,
-      pageId: 1,
+      pageId: 2,
     };
 
     // Update the data via API

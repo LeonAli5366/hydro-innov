@@ -8,15 +8,15 @@ import React, { useState } from "react";
 // Fetch data
 const allData = await getAllPageData(2);
 const sixthData = allData?.sixthSection || [];
+const secondObject = sixthData?.[0];
 
-const firstObject = sixthData?.[0];
 
 const FirstSection = () => {
-  // Sub section 1
+
   const [input, setInput] = useState({
-    title: firstObject?.title || "",
-    subtitle: firstObject?.subtitle || "",
-    photo: firstObject?.photo || "",
+    title: secondObject?.title || "",
+    subtitle: secondObject?.subtitle || "",
+    photo: secondObject?.photo || "",
   });
 
   const [photoFile, setPhotoFile] = useState(null);

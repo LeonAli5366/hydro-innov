@@ -6,10 +6,9 @@ import Image from "next/image";
 import React, { useState } from "react";
 
 // Fetch data
-const allData = await getAllPageData(1);
+const allData = await getAllPageData(3);
 const tenthData = allData?.tenthSection || [];
-
-const tenObject = tenthData?.[8];
+const tenObject = tenthData?.[2];
 
 const SubThirdSection = () => {
   // Sub section 1

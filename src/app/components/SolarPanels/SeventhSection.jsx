@@ -15,7 +15,6 @@ import React, { useState, useEffect } from "react";
 // Fetch data
 const allData = await getAllPageData(2);
 const seventhData = allData?.seventhSection || [];
-console.log(seventhData);
 
 const SeventhSection = () => {
   const [input, setInput] = useState({
@@ -23,8 +22,6 @@ const SeventhSection = () => {
     subtitle: seventhData.subtitle,
     photo: seventhData.photo,
   });
-
-
 
   const handleUpdate = async (e) => {
     e.preventDefault();

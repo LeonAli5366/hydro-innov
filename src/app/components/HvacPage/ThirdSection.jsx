@@ -26,7 +26,6 @@ const ThirdSection = () => {
     subtitlthree: thirdData.subtitlthree,
   });
 
-
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -39,8 +38,6 @@ const ThirdSection = () => {
       subtitlthree: input.subtitlthree,
       pageId: 3,
     };
-
-    
 
     try {
       const apiRes = await fetch(
@@ -87,7 +84,6 @@ const ThirdSection = () => {
                 >
                   {input.titleone}
                 </Textarea>
-
               </label>
               <label htmlFor="" className="flex flex-col gap-y-1">
                 <span className="text-sm font-medium opacity-90">
@@ -125,10 +121,10 @@ const ThirdSection = () => {
                   name=""
                   id=""
                   onChange={(e) =>
-                    setInput({ ...input, subtitletwo : e.target.value })
+                    setInput({ ...input, subtitletwo: e.target.value })
                   }
                 >
-                  {input.subtitletwo }
+                  {input.subtitletwo}
                 </Textarea>
               </label>
             </div>

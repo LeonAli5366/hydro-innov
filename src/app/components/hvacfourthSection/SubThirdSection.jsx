@@ -7,7 +7,9 @@ import React, { useState } from "react";
 // Fetch data
 const allData = await getAllPageData(3);
 const fourthData = allData?.fourthSection || [];
-const fourthObject = fourthData?.[8];
+const fourthObject = fourthData?.[2];
+console.log(fourthObject);
+
 
 const SubThirdSection = () => {
   const [input, setInput] = useState({
