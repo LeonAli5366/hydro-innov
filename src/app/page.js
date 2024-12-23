@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Header from "./components/Header";
 // button color #133871
 
 const homeData = [
@@ -29,6 +30,7 @@ const homeData = [
 export default function Home() {
   return (
     <div className="relative text-white">
+      <Header />
       {homeData?.map((home, index) => {
         return (
           <div

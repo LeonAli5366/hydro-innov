@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import getAllPageData from "@/app/lib/getAllPageData";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,50 +10,63 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
-
-// Fetch data
-const allData = await getAllPageData(2);
-const eigthData = allData?.eighthSection || [];
-console.log(eigthData);
+import getAllPageData from "@/app/lib/getAllPageData";
 
 const EigthSection = () => {
   const [input, setInput] = useState({
-    title: eigthData.title,
-    subtitle: eigthData.subtitle,
-
-    titleone: eigthData.titleone,
-    subtitleone: eigthData.subtitleone,
-
-    titletwo: eigthData.titletwo,
-    subtitletwo: eigthData.subtitletwo,
-
-    titlethree: eigthData.titlethree,
-    subtitlethree: eigthData.subtitlethree,
-    photo: eigthData.photo,
+    title: "",
+    subtitle: "",
+    titleone: "",
+    subtitleone: "",
+    titletwo: "",
+    subtitletwo: "",
+    titlethree: "",
+    subtitlethree: "",
+    photo: "",
   });
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
+
+  // Fetch data on mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const allData = await getAllPageData(2);
+        const eigthData = allData?.eighthSection || [];
+        setInput({
+          title: eigthData?.title || "",
+          subtitle: eigthData?.subtitle || "",
+          titleone: eigthData?.titleone || "",
+          subtitleone: eigthData?.subtitleone || "",
+          titletwo: eigthData?.titletwo || "",
+          subtitletwo: eigthData?.subtitletwo || "",
+          titlethree: eigthData?.titlethree || "",
+          subtitlethree: eigthData?.subtitlethree || "",
+          photo: eigthData?.photo || "",
+        });
+        setLoading(false);
+      } catch (err) {
+        setError("Error fetching data.");
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) setPhotoFile(file);
+  };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    let updatedPhotoUrl = input.photo;
 
-    const photoFile = e.target.photo?.files[0];
-
-    const updateData = {
-      title: input.title,
-      subtitle: input.subtitle,
-      titleone: input.titleone,
-      subtitleone: input.subtitleone,
-      titletwo: input.titletwo,
-      subtitletwo: input.subtitletwo,
-      titlethree: input.titlethree,
-      subtitlethree: input.subtitlethree,
-      pageId: 2,
-      photo: input.photo,
-    };
-
-    console.log(updateData);
-
+    // Handle photo upload if there's a new file selected
     if (photoFile) {
       const photoData = new FormData();
       photoData.append("file", photoFile);
@@ -69,10 +82,11 @@ const EigthSection = () => {
           }
         );
         const cloudinaryData = await cloudinaryRes.json();
-        const photoUrl = cloudinaryData?.url;
+        updatedPhotoUrl = cloudinaryData?.url;
 
-        if (photoUrl) {
-          updateData.photo = photoUrl;
+        if (!updatedPhotoUrl) {
+          toast.error("Image upload failed. Please try again.");
+          return;
         }
       } catch (error) {
         console.error("Error uploading photo:", error);
@@ -81,9 +95,17 @@ const EigthSection = () => {
       }
     }
 
+    // Prepare update data
+    const updateData = {
+      ...input,
+      photo: updatedPhotoUrl,
+      pageId: 2,
+    };
+
+    // Update data via API
     try {
       const apiRes = await fetch(
-        `http://localhost:3000/api/dashboard/tesla/eighthSection?id=2`,
+        "http://localhost:3000/api/dashboard/tesla/eighthSection?id=2",
         {
           method: "PUT",
           headers: {
@@ -106,12 +128,21 @@ const EigthSection = () => {
     }
   };
 
+  // Show loading or error states
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <div className="p-5">
       <form onSubmit={handleUpdate}>
         <Card>
           <CardHeader>
-            <CardTitle>Section 8 content</CardTitle>
+            <CardTitle>Section 8 Content</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-5">
             <div className="grid grid-cols-2 gap-5">
@@ -156,7 +187,12 @@ const EigthSection = () => {
                   className="sm:max-h-[600px] sm:h-full max-w-full w-full object-cover rounded"
                 />
               )}
-              <input type="file" name="photo" className="mt-3" />
+              <input
+                type="file"
+                name="photo"
+                className="mt-3"
+                onChange={handlePhotoChange}
+              />
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">

@@ -8,14 +8,14 @@ import React, { useState } from "react";
 // Fetch data
 const allData = await getAllPageData(1);
 const tenthData = allData?.tenthSection || [];
-const tenObject = tenthData?.[2];
+const tenthObject = tenthData?.[2];
 
 const SubThirdSection = () => {
   // Sub section 1
   const [input, setInput] = useState({
-    title: tenObject?.title || "",
-    subtitle: tenObject?.subtitle || "",
-    photo: tenObject?.photo || "",
+    title: tenthObject?.title || "",
+    subtitle: tenthObject?.subtitle || "",
+    photo: tenthObject?.photo || "",
   });
 
   const [photoFile, setPhotoFile] = useState(null);
@@ -64,7 +64,7 @@ const SubThirdSection = () => {
       title: input.title,
       subtitle: input.subtitle,
       photo: updatedPhotoUrl,
-      pageId: 2,
+      pageId: 1,
     };
 
     // Update the data via API
@@ -97,7 +97,7 @@ const SubThirdSection = () => {
         <div className="flex flex-col gap-y-3 w-full">
           {/* background image 1 */}
           <div className="w-full">
-            <span className="text-sm font-medium opacity-90">Image 1</span>
+            <span className="text-sm font-medium opacity-90">Image 3</span>
             <Image
               src={input.photo}
               alt="img not found"
@@ -113,14 +113,14 @@ const SubThirdSection = () => {
             />
           </div>
           <label htmlFor="" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Title 1</span>
+            <span className="text-sm font-medium opacity-90">Title 3</span>
             <Textarea
               value={input.title}
               onChange={(e) => setInput({ ...input, title: e.target.value })}
             />
           </label>
           <label htmlFor="" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Subtitle 1</span>
+            <span className="text-sm font-medium opacity-90">Subtitle 3</span>
             <Textarea
               value={input.subtitle}
               onChange={(e) => setInput({ ...input, subtitle: e.target.value })}

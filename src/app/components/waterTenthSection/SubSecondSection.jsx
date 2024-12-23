@@ -64,7 +64,7 @@ const SubSecondSection = () => {
       title: input.title,
       subtitle: input.subtitle,
       photo: updatedPhotoUrl,
-      pageId: 2,
+      pageId: 1,
     };
 
     // Update the data via API
@@ -97,7 +97,7 @@ const SubSecondSection = () => {
         <div className="flex flex-col gap-y-3 w-full">
           {/* background image 1 */}
           <div className="w-full">
-            <span className="text-sm font-medium opacity-90">Image 1</span>
+            <span className="text-sm font-medium opacity-90">Image 2</span>
             <Image
               src={input.photo}
               alt="img not found"
@@ -113,14 +113,14 @@ const SubSecondSection = () => {
             />
           </div>
           <label htmlFor="" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Title 1</span>
+            <span className="text-sm font-medium opacity-90">Title 2</span>
             <Textarea
               value={input.title}
               onChange={(e) => setInput({ ...input, title: e.target.value })}
             />
           </label>
           <label htmlFor="" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Subtitle 1</span>
+            <span className="text-sm font-medium opacity-90">Subtitle 2</span>
             <Textarea
               value={input.subtitle}
               onChange={(e) => setInput({ ...input, subtitle: e.target.value })}

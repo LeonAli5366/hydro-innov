@@ -21,20 +21,43 @@ export async function POST(req, res) {
 
 // GET ALL PRODUCT
 export async function GET(req, res) {
+  const prisma = new PrismaClient();
+
   try {
-    const prisma = new PrismaClient();
+    let { searchParams } = new URL(req.url);
+    let product_id = searchParams.get("id");
 
-    // Fetch all orders with related product details
-    const result = await prisma.orders.findMany({
-      include: {
-        product: true, 
-      },
-    });
+    if (product_id) {
+      // Fetch a single product by ID if the ID is provided
+      const result = await prisma.products.findUnique({
+        where: {
+          id: parseInt(product_id), // Ensure the ID is a number
+        },
+        include: {
+          orders: true,
+        },
+      });
 
-    return NextResponse.json({ status: "Success", data: result });
+      if (!result) {
+        return NextResponse.json({ status: "Fail", data: "Product not found" });
+      }
+
+      return NextResponse.json({ status: "Success", data: result });
+    } else {
+      // Fetch all products if no ID is provided
+      const result = await prisma.products.findMany({
+        include: {
+          orders: true,
+        },
+      });
+
+      return NextResponse.json({ status: "Success", data: result });
+    }
   } catch (error) {
-    console.error("Error fetching orders:", error);
-    return NextResponse.json({ status: "Fail", data: "no data" });
+    console.error("Error fetching products:", error);
+    return NextResponse.json({ status: "Fail", data: "Internal server error" });
+  } finally {
+    await prisma.$disconnect(); // Disconnect Prisma client after the operation
   }
 }
 
@@ -58,7 +81,7 @@ export async function DELETE(req, res) {
 // UPDATE PRODUCT
 export async function PUT(req, res) {
   try {
-    let { title, subtitle, photo } = await req.json();
+    let { title, subTitle, photo } = await req.json();
 
     let { searchParams } = new URL(req.url);
     let product_id = searchParams.get("id");
@@ -71,7 +94,7 @@ export async function PUT(req, res) {
       },
       data: {
         title,
-        subtitle,
+        subTitle,
         photo,
       },
     });
@@ -95,8 +118,17 @@ export async function PATCH(req, res) {
         id: parseInt(product_id),
       },
     });
+
+    if (!result) {
+      return NextResponse.json({ status: "Fail", data: "Product not found" });
+    }
+
     return NextResponse.json({ status: "Success", data: result });
   } catch (error) {
-    return NextResponse.json({ status: "Fail", data: "no data" });
+    console.error("Error fetching single product:", error);
+    return NextResponse.json({
+      status: "Fail",
+      data: "Error fetching product",
+    });
   }
 }

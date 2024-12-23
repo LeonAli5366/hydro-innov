@@ -11,19 +11,41 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-// Fetch data
-const allData = await getAllPageData(2);
-const fisrtData = allData?.firstSection || [];
-
 const FirstSection = () => {
-  const [input, setinput] = useState({
-    title: fisrtData.title,
-    subtitle: fisrtData.subtitle,
-    video: fisrtData.video,
+  // State to store the fetched data
+  const [input, setInput] = useState({
+    title: "",
+    subtitle: "",
+    video: "",
   });
+  const [loading, setLoading] = useState(true); // State for loading status
+  const [error, setError] = useState(null); // State for error handling
+
+  // Fetch data when the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const allData = await getAllPageData(2);
+        const firstData = allData?.firstSection || {};
+        
+        // Update the state with fetched data
+        setInput({
+          title: firstData.title || "",
+          subtitle: firstData.subtitle || "",
+          video: firstData.video || "",
+        });
+        setLoading(false); // Data loaded successfully
+      } catch (err) {
+        setError("Error fetching data");
+        setLoading(false); // Error occurred, stop loading
+      }
+    };
+
+    fetchData(); // Call the async function inside useEffect
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -88,6 +110,15 @@ const FirstSection = () => {
     }
   };
 
+  // Show loading or error if applicable
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <div className="p-5">
       <form onSubmit={handleUpdate}>
@@ -117,21 +148,19 @@ const FirstSection = () => {
                   name=""
                   id=""
                   onChange={(e) =>
-                    setinput({ ...input, title: e.target.value })
+                    setInput({ ...input, title: e.target.value })
                   }
-                >
-                  {input.title}
-                </Textarea>
+                  value={input.title} // Set value from state
+                />
               </label>
               <label htmlFor="" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Subtitle</span>
                 <Textarea
                   onChange={(e) =>
-                    setinput({ ...input, subtitle: e.target.value })
+                    setInput({ ...input, subtitle: e.target.value })
                   }
-                >
-                  {input.subtitle}
-                </Textarea>
+                  value={input.subtitle} // Set value from state
+                />
               </label>
             </div>
           </CardContent>

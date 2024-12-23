@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import SubFirstSection from "../solarTenthSection/SubFirstSection";
-import SubSecondSection from "../solarTenthSection/SubSecondSection";
-import SubThirdSection from "../solarTenthSection/SubThirdSection";
+import SubFirstSection from "../waterTenthSection/SubFirstSection";
+import SubSecondSection from "../waterTenthSection/SubSecondSection";
+import SubThirdSection from "../waterTenthSection/SubThirdSection";
 
 export default function TenthSection() {
   return (

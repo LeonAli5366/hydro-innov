@@ -8,14 +8,15 @@ import React, { useState } from "react";
 // Fetch data
 const allData = await getAllPageData(1);
 const sixthData = allData?.sixthSection || [];
-const firstObject = sixthData?.[7];
+const secondObject = sixthData?.[3];
+
 
 const FourthSection = () => {
-  // Sub section 1
+
   const [input, setInput] = useState({
-    title: firstObject?.title || "",
-    subtitle: firstObject?.subtitle || "",
-    photo: firstObject?.photo || "",
+    title: secondObject?.title || "",
+    subtitle: secondObject?.subtitle || "",
+    photo: secondObject?.photo || "",
   });
 
   const [photoFile, setPhotoFile] = useState(null);
@@ -97,7 +98,7 @@ const FourthSection = () => {
         <div className="flex flex-col gap-y-3 w-full">
           {/* background image 1 */}
           <div className="w-full">
-            <span className="text-sm font-medium opacity-90">Image 4</span>
+            <span className="text-sm font-medium opacity-90">Image 1</span>
             <Image
               src={input.photo}
               alt="img not found"
@@ -113,14 +114,14 @@ const FourthSection = () => {
             />
           </div>
           <label htmlFor="" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Title 4</span>
+            <span className="text-sm font-medium opacity-90">Title 1</span>
             <Textarea
               value={input.title}
               onChange={(e) => setInput({ ...input, title: e.target.value })}
             />
           </label>
           <label htmlFor="" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Subtitle 4</span>
+            <span className="text-sm font-medium opacity-90">Subtitle 1</span>
             <Textarea
               value={input.subtitle}
               onChange={(e) => setInput({ ...input, subtitle: e.target.value })}

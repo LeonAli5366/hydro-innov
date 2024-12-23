@@ -23,8 +23,6 @@ const SeventhSection = () => {
     photo: seventhData.photo,
   });
 
-
-
   const handleUpdate = async (e) => {
     e.preventDefault();
 

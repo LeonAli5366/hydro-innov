@@ -19,11 +19,9 @@ const fifthData = allData?.fifthSection || [];
 const FifthSection = () => {
   const [input, setInput] = useState({
     title: fifthData.title,
-    subtitle:fifthData.subtitle,
+    subtitle: fifthData.subtitle,
     photo: fifthData.photo,
   });
-
-  
 
   const handleUpdate = async (e) => {
     e.preventDefault();

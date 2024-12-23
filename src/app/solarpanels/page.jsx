@@ -6,6 +6,8 @@ import ImageSlide from "../components/ImageSlide";
 import SideImageSlide from "../components/SideImageSlide";
 import Link from "next/link";
 import getAllPageData from "../lib/getAllPageData";
+import { PropagateLoader } from "react-spinners";
+import Header from "../components/Header";
 
 const Page = () => {
   const [loading, setLoading] = useState(true);
@@ -31,7 +33,7 @@ const Page = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p>Loading...</p>
+        <PropagateLoader />
       </div>
     );
   }
@@ -61,6 +63,7 @@ const Page = () => {
   return (
     <>
       {/* sec 1 */}
+      <Header />
       <div className="w-full h-screen relative">
         <video className="w-full h-full object-cover" autoPlay muted loop>
           <source src={firstSection?.video} type="video/webm" />
@@ -160,7 +163,7 @@ const Page = () => {
       </div>
 
       {/* sec 7 */}
-      <ImageSlide />
+      <ImageSlide data={sixthSection} />
 
       {/* sec 8 */}
       <div className=" bg-black relative">
@@ -179,10 +182,74 @@ const Page = () => {
             <h1 className="text-2xl sm:font-bold font-semibold sm:w-[60%] text-white">
               {seventhSection?.title}
             </h1>
-            <p className="text-[13px] sm:w-[40%] text-white opacity-90">
+            <p className="text-[13px] text-white opacity-90">
               {seventhSection?.subtitle}
             </p>
           </div>
+        </div>
+      </div>
+
+      <div className="bg-black text-white">
+        <div className="w-full sm:h-screen flex flex-col justify-between max-w-[1100px] mx-auto sm:gap-20 gap-10 px-5">
+          <div className="w-full flex max-sm:flex-col-reverse items-center justify-between sm:gap-10 h-full">
+            <div className="space-y-5">
+              <h1 className="text-2xl font-bold sm:max-w-[250px]">
+                {eighthSection?.title}
+              </h1>
+              <p className="text-sm font-medium opacity-90 max-w-[400px]">
+                {eighthSection?.subtitle}
+              </p>
+            </div>
+            <Image
+              src={eighthSection?.photo}
+              alt="mobile-app"
+              width={400}
+              height={700}
+              className="max-w-full w-full max-h-full h-full"
+            />
+          </div>
+          <div className="w-full flex max-sm:flex-col justify-between sm:gap-32 gap-10 mb-32">
+            <div className="space-y-3">
+              <span className="text-xl font-bold">
+                {eighthSection?.titleone}
+              </span>
+              <p className="text-sm font-medium opacity-90">
+                {eighthSection?.subtitleone}
+              </p>
+            </div>
+            <div className="space-y-3">
+              <span className="text-xl font-bold">
+                {eighthSection?.titletwo}
+              </span>
+              <p className="text-sm font-medium opacity-90">
+                {eighthSection?.subtitletwo}
+              </p>
+            </div>
+            <div className="space-y-3">
+              <span className="text-xl font-bold">
+                {eighthSection?.titlethree}
+              </span>
+              <p className="text-sm font-medium opacity-90">
+                {eighthSection?.subtitlethree}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full sm:h-screen max-sm:flex max-sm:flex-col gap-5 relative bg-black">
+        <Image
+          src={ninethSection?.photo}
+          alt=""
+          width={1000}
+          height={1000}
+          className="sm:absolute sm:top-0 sm:left-0 max-w-full w-full sm:max-h-full h-full min-h-[400px] object-cover"
+        />
+        <div className="max-w-[1100px] mx-auto flex max-sm:flex-col sm:gap-10 gap-5 h-full sm:items-end text-white sm:pb-16 px-5">
+          <span className="text-2xl font-bold">{ninethSection?.title}</span>
+          <p className="text-sm font-medium opacity-90">
+            {ninethSection?.subtitle}
+          </p>
         </div>
       </div>
 

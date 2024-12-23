@@ -65,7 +65,7 @@ export default function Header() {
     <header
       className={`${
         isScrolled ? "bg-white text-black shadow" : "bg-transparent text-white"
-      } sm:fixed sm:top-0 h-14 w-full flex items-center sm:px-16 px-5 z-10 transition-all duration-300`}
+      } sm:fixed sm:top-0 h-14 w-full sm:flex items-center hidden sm:px-16 px-5 z-50 transition-all duration-300`}
     >
       <Link href={"/"}>
         <abbr title="Home">

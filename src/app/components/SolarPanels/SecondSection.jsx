@@ -9,21 +9,44 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import getAllPageData from "@/app/lib/getAllPageData";
 import { toast } from "sonner";
 
-// Fetch data
-const allData = await getAllPageData(2);
-const secondData = allData?.secondSection || [];
-console.log(secondData);
-
 const SecondSection = () => {
+  // State for input fields and loading state
   const [input, setInput] = useState({
-    title: secondData.title,
-    subtitle: secondData.subtitle,
-    photo: secondData.photo,
+    title: "",
+    subtitle: "",
+    photo: "",
   });
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error handling
+
+  // Fetch data inside useEffect
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const allData = await getAllPageData(2);
+        const secondData = allData?.secondSection || {}; // Accessing secondSection data
+
+        // Update state with fetched data
+        setInput({
+          title: secondData.title || "",
+          subtitle: secondData.subtitle || "",
+          photo: secondData.photo || "",
+        });
+
+        setLoading(false); // Finished loading
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError("Error fetching data");
+        setLoading(false); // Stop loading on error
+      }
+    };
+
+    fetchData();
+  }, []); // Empty array means it runs only once when the component mounts
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -36,8 +59,7 @@ const SecondSection = () => {
       pageId: 2,
     };
 
-    console.log(updateData);
-
+    // Handle image upload if a new photo is selected
     if (photoFile) {
       const photoData = new FormData();
       photoData.append("file", photoFile);
@@ -56,7 +78,7 @@ const SecondSection = () => {
         const photoUrl = cloudinaryData?.url;
 
         if (photoUrl) {
-          updateData.photo = photoUrl;
+          updateData.photo = photoUrl; // Update with the URL from Cloudinary
         }
       } catch (error) {
         console.error("Error uploading photo:", error);
@@ -65,6 +87,7 @@ const SecondSection = () => {
       }
     }
 
+    // Update section in the backend
     try {
       const apiRes = await fetch(
         `http://localhost:3000/api/dashboard/tesla/secondSection?id=2`,
@@ -89,6 +112,15 @@ const SecondSection = () => {
       toast.error("An error occurred while updating the Section.");
     }
   };
+
+  // Handle loading or error states
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="p-5">

@@ -1,23 +1,44 @@
 "use client";
+import { useState, useEffect } from "react";
 import getAllPageData from "@/app/lib/getAllPageData";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
 import { toast } from "sonner";
-
-// Fetch data
-const allData = await getAllPageData(2);
-const fourthData = allData?.fourthSection || [];
-const fourthObject = fourthData?.[1];
 
 const SubSecondSection = () => {
   const [input, setInput] = useState({
-    tag: fourthObject?.tag || "",
-    desc: fourthObject?.desc || "",
-    video: fourthObject?.video || "",
+    tag: "",
+    desc: "",
+    video: "",
   });
 
   const [videoFile, setVideoFile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch data inside useEffect
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const allData = await getAllPageData(2);
+        const fourthData = allData?.fourthSection || [];
+        const fourthObject = fourthData?.[1] || {};
+
+        setInput({
+          tag: fourthObject?.tag || "",
+          desc: fourthObject?.desc || "",
+          video: fourthObject?.video || "",
+        });
+        setLoading(false); // Finished loading
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError("Error fetching data");
+        setLoading(false); // Stop loading on error
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array to run only once when the component mounts
 
   // Handle video file selection
   const handleVideoChange = (e) => {
@@ -54,12 +75,12 @@ const SubSecondSection = () => {
         updatedVideoUrl = cloudinaryData?.url;
 
         if (!updatedVideoUrl) {
-          alert("Video upload failed. Please try again.");
+          toast.error("Video upload failed. Please try again.");
           return;
         }
       } catch (error) {
         console.error("Error uploading video:", error);
-        alert("An error occurred while uploading the video.");
+        toast.error("An error occurred while uploading the video.");
         return;
       }
     }
@@ -71,8 +92,6 @@ const SubSecondSection = () => {
       video: updatedVideoUrl,
       pageId: 2,
     };
-
-    console.log("Updating data:", updateData);
 
     // Send data to the API
     try {
@@ -100,6 +119,15 @@ const SubSecondSection = () => {
       toast.error("An error occurred while updating the data.");
     }
   };
+
+  // Handle loading or error states
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="w-full flex flex-col gap-5">

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import getAllPageData from "@/app/lib/getAllPageData";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,31 +10,54 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
 import { toast } from "sonner";
-
-// Fetch data
-const allData = await getAllPageData(2);
-const ninethData = allData?.ninethSection || [];
-console.log(ninethData);
+import getAllPageData from "@/app/lib/getAllPageData";
 
 const NinethSection = () => {
   const [input, setInput] = useState({
-    title: ninethData.title,
-    subtitle: ninethData.subtitle,
-    photo: ninethData.photo,
+    title: "",
+    subtitle: "",
+    photo: "",
   });
+  const [photoFile, setPhotoFile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Fetch data on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const allData = await getAllPageData(2);
+        const ninethData = allData?.ninethSection || [];
+        setInput({
+          title: ninethData?.title || "",
+          subtitle: ninethData?.subtitle || "",
+          photo: ninethData?.photo || "",
+        });
+        setLoading(false);
+      } catch (err) {
+        setError("Error fetching data.");
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Handle photo change
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPhotoFile(file);
+    }
+  };
+
+  // Handle form update
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-    const photoFile = e.target.photo?.files[0];
-    const updateData = {
-      title: input.title,
-      subtitle: input.subtitle,
-      photo: input.photo,
-      pageId: 2,
-    };
+    // Prepare data for updating
+    let updatedPhotoUrl = input.photo;
 
     if (photoFile) {
       const photoData = new FormData();
@@ -51,10 +74,11 @@ const NinethSection = () => {
           }
         );
         const cloudinaryData = await cloudinaryRes.json();
-        const photoUrl = cloudinaryData?.url;
+        updatedPhotoUrl = cloudinaryData?.url;
 
-        if (photoUrl) {
-          updateData.photo = photoUrl;
+        if (!updatedPhotoUrl) {
+          toast.error("Image upload failed. Please try again.");
+          return;
         }
       } catch (error) {
         console.error("Error uploading photo:", error);
@@ -63,9 +87,17 @@ const NinethSection = () => {
       }
     }
 
+    // Prepare final update data
+    const updateData = {
+      ...input,
+      photo: updatedPhotoUrl,
+      pageId: 2,
+    };
+
+    // Send the update to the API
     try {
       const apiRes = await fetch(
-        `http://localhost:3000/api/dashboard/tesla/ninethSection?id=2`,
+        "http://localhost:3000/api/dashboard/tesla/ninethSection?id=2",
         {
           method: "PUT",
           headers: {
@@ -88,6 +120,15 @@ const NinethSection = () => {
     }
   };
 
+  // Show loading or error states
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <div className="p-5">
       <form onSubmit={handleUpdate}>
@@ -96,10 +137,9 @@ const NinethSection = () => {
             <CardTitle>Section 9 Content</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-5">
+            {/* Background Image Section */}
             <div className="w-full flex flex-col gap-2">
-              <span className="text-sm font-medium opacity-90">
-                Background Image
-              </span>
+              <span className="text-sm font-medium opacity-90">Background Image</span>
               <img
                 src={input.photo || "/placeholder-image.jpg"}
                 alt="Section Background"
@@ -107,21 +147,31 @@ const NinethSection = () => {
                 height={500}
                 className="sm:max-h-[600px] sm:h-full max-w-full w-full object-cover rounded"
               />
-              <input type="file" name="photo" />
+              <input
+                type="file"
+                name="photo"
+                onChange={handlePhotoChange}
+                className="mt-3"
+              />
             </div>
+
+            {/* Title and Subtitle Section */}
             <div className="flex max-sm:flex-col sm:items-center sm:justify-between gap-5 w-full">
-              <label htmlFor="" className="flex flex-col gap-y-1 w-full">
+              <label htmlFor="title" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Title</span>
                 <Textarea
+                  id="title"
                   value={input.title}
                   onChange={(e) =>
                     setInput({ ...input, title: e.target.value })
                   }
                 />
               </label>
-              <label htmlFor="" className="flex flex-col gap-y-1 w-full">
+
+              <label htmlFor="subtitle" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Subtitle</span>
                 <Textarea
+                  id="subtitle"
                   value={input.subtitle}
                   onChange={(e) =>
                     setInput({ ...input, subtitle: e.target.value })

@@ -8,8 +8,8 @@ import React, { useState } from "react";
 // Fetch data
 const allData = await getAllPageData(3);
 const sixthData = allData?.sixthSection || [];
+const firstObject = sixthData?.[0];
 
-const firstObject = sixthData?.[8];
 
 const FirstSection = () => {
   // Sub section 1

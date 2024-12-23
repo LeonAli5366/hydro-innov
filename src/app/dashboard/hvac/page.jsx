@@ -1,16 +1,15 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
-import FirstSection from "@/app/components/SolarPanels/FirstSection";
-import SecondSection from "@/app/components/SolarPanels/SecondSection";
-import ThirdSection from "@/app/components/SolarPanels/ThirdSection";
-import FifthSection from "@/app/components/SolarPanels/FifthSection";
-import SeventhSection from "@/app/components/SolarPanels/SeventhSection";
-import EigthSection from "@/app/components/SolarPanels/EigthSection";
-import NinethSection from "@/app/components/SolarPanels/NinethSection";
-import TenthSection from "@/app/components/SolarPanels/TenthSection";
-import FourthSection from "@/app/components/SolarPanels/FourthSection";
-import SixthSection from "@/app/components/SolarPanels/SixthSection";
+import EigthSection from "@/app/components/HvacPage/EigthSection";
+import FifthSection from "@/app/components/HvacPage/FifthSection";
+import FirstSection from "@/app/components/HvacPage/FirstSection";
+import FourthSection from "@/app/components/HvacPage/FourthSection";
+import NinethSection from "@/app/components/HvacPage/NinethSection";
+import SecondSection from "@/app/components/HvacPage/SecondSection";
+import SeventhSection from "@/app/components/HvacPage/SeventhSection";
+import SixthSection from "@/app/components/HvacPage/SixthSection";
+import TenthSection from "@/app/components/HvacPage/TenthSection";
+import ThirdSection from "@/app/components/HvacPage/ThirdSection";
 
 const page = () => {
   return (

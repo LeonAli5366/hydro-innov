@@ -2,7 +2,7 @@
 import Header from "./components/Header";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { Toaster } from 'sonner'
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,13 +17,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     // <ClerkProvider>
-      <html lang="en">
-        <body className={`${inter.className} antialiased`}>
-          <Header />
-          {children}
-          <Toaster richColors/>
-        </body>
-      </html>
+    <html lang="en">
+      <body className={`${inter.className} antialiased`}>
+        {children}
+        <Toaster richColors />
+      </body>
+    </html>
     // </ClerkProvider>
   );
 }
