@@ -108,12 +108,12 @@ const SecondSection = () => {
                   alt="Background Photo"
                   width={800}
                   height={500}
-                  className="object-cover rounded max-h-[600px] max-w-full w-full h-full"
+                  className="object-cover rounded sm:max-h-[600px] max-w-full w-full sm:h-full"
                 />
               )}
               <input type="file" name="photo" />
             </div>
-            <div className="w-full flex items-center justify-between gap-5">
+            <div className="w-full flex max-sm:flex-col sm:items-center sm:justify-between gap-5">
               <label htmlFor="title" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Title</span>
                 <Textarea

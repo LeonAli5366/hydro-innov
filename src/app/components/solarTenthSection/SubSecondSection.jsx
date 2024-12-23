@@ -105,7 +105,7 @@ const SubSecondSection = () => {
               alt="img not found"
               width={800}
               height={500}
-              className="max-h-[600px] h-full max-w-full w-full object-cover rounded"
+              className="sm:max-h-[600px] sm:h-full max-w-full w-full object-cover rounded"
             />
             <input
               type="file"
@@ -114,7 +114,7 @@ const SubSecondSection = () => {
               onChange={handlePhotoChange}
             />
           </div>
-          <div className="w-full flex items-center justify-between gap-5">
+          <div className="w-full flex max-sm:flex-col sm:items-center sm:justify-between gap-5">
             <label htmlFor="" className="flex flex-col gap-y-1 w-full">
               <span className="text-sm font-medium opacity-90">Title 1</span>
               <Textarea

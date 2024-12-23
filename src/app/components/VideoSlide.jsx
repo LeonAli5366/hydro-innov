@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
 
-const VideoSlide = () => {
-  const [videoSrc, setVideoSrc] = useState("/videos/video-slide-1.webm");
-  const [isActive, setIsActive] = useState("/videos/video-slide-1.webm");
+const VideoSlide = ({ data }) => {
+  const [videoSrc, setVideoSrc] = useState(data[0]?.video);
+  const [isActive, setIsActive] = useState(data[0]?.video);
 
+  console.log(videoSrc, isActive);
   // Handle button click to change video source
   const changeVideo = (newVideoSrc) => {
     const videoElement = document.getElementById("videoPlayer");
@@ -48,103 +49,91 @@ const VideoSlide = () => {
           <div className="flex items-center gap-x-2 mb-4">
             <button
               onClick={() => {
-                changeVideo("/videos/video-slide-1.webm");
-                changeActive("/videos/video-slide-1.webm");
+                changeVideo(data[0]?.video);
+                changeActive(data[0]?.video);
               }}
               className={`size-3 rounded-full transition-all duration-500 ${
-                isActive === "/videos/video-slide-1.webm"
-                  ? "bg-white"
-                  : "bg-[#5C5E62]"
+                isActive === data[0]?.video ? "bg-white" : "bg-[#5C5E62]"
               }`}
             ></button>
             <button
               onClick={() => {
-                changeVideo("/videos/video-slide-2.webm");
-                changeActive("/videos/video-slide-2.webm");
+                changeVideo(data[1]?.video);
+                changeActive(data[1]?.video);
               }}
               className={`size-3 rounded-full transition-all duration-500 ${
-                isActive === "/videos/video-slide-2.webm"
-                  ? "bg-white"
-                  : "bg-[#5C5E62]"
+                isActive === data[1]?.video ? "bg-white" : "bg-[#5C5E62]"
               }`}
             ></button>
             <button
               onClick={() => {
-                changeVideo("/videos/video-slide-3.webm");
-                changeActive("/videos/video-slide-3.webm");
+                changeVideo(data[2]?.video);
+                changeActive(data[2]?.video);
               }}
               className={`size-3 rounded-full transition-all duration-500 ${
-                isActive === "/videos/video-slide-3.webm"
-                  ? "bg-white"
-                  : "bg-[#5C5E62]"
+                isActive === data[2]?.video ? "bg-white" : "bg-[#5C5E62]"
               }`}
             ></button>
             <button
               onClick={() => {
-                changeVideo("/videos/video-slide-4.webm");
-                changeActive("/videos/video-slide-4.webm");
+                changeVideo(data[3]?.video);
+                changeActive(data[3]?.video);
               }}
               className={`size-3 rounded-full transition-all duration-500 ${
-                isActive === "/videos/video-slide-4.webm"
-                  ? "bg-white"
-                  : "bg-[#5C5E62]"
+                isActive === data[3]?.video ? "bg-white" : "bg-[#5C5E62]"
               }`}
             ></button>
           </div>
           {/* tile & des 1 */}
           <div
             className={`space-y-2 ${
-              isActive === "/videos/video-slide-1.webm" ? "block" : "hidden"
+              isActive === data[0]?.video ? "block" : "hidden"
             }`}
           >
             <h1 className="sm:text-lg sm:font-bold font-semibold text-white">
-              Generate Clean Energy
+              {data[0]?.title}
             </h1>
             <p className="text-[13px] font-medium text-white">
-              Harness the sun&apos;s power with our solar panels to produce
-              renewable energy whenever sunlight is available.
+              {data[0]?.subtitle}
             </p>
           </div>
           {/* tile & des 2 */}
           <div
             className={`space-y-2 ${
-              isActive === "/videos/video-slide-2.webm" ? "block" : "hidden"
+              isActive === data[1]?.video ? "block" : "hidden"
             }`}
           >
             <h1 className="sm:text-lg sm:font-bold font-semibold text-white">
-              Power Your Life
+              {data?.title}
             </h1>
             <p className="text-[13px] font-medium text-white">
-              Use solar energy to run everything from your TV to your internet,
-              keeping your home and apartment running sustainably.
+              {data?.subtitle}
             </p>
           </div>
           {/* tile & des 3 */}
           <div
             className={`space-y-2 ${
-              isActive === "/videos/video-slide-3.webm" ? "block" : "hidden"
+              isActive === data[2]?.video ? "block" : "hidden"
             }`}
           >
             <h1 className="sm:text-lg sm:font-bold font-semibold text-white">
-              Store Excess Energy
+              {data[2]?.title}
             </h1>
             <p className="text-[13px] font-medium text-white">
-              Save surplus solar power in Powerwall for use during storms,
-              outages, or when utility rates spike.
+              {data[2]?.subtitle}
             </p>
           </div>
           {/* tile & des 4 */}
           <div
             className={`space-y-2 ${
-              isActive === "/videos/video-slide-4.webm" ? "block" : "hidden"
+              isActive === data[3]?.video ? "block" : "hidden"
             }`}
           >
             <h1 className="sm:text-lg sm:font-bold font-semibold text-white">
-              Charge Your EV
+              {data[3]?.title}
             </h1>
             <p className="text-[13px] font-medium text-white">
-              Power your electric vehicle at home or apartment with clean energy
-              using a wall connector.
+              {data[3]?.subtitle}
             </p>
           </div>
         </div>

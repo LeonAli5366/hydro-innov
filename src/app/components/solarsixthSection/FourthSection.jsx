@@ -1,9 +1,10 @@
-'use client'
+"use client";
 import getAllPageData from "@/app/lib/getAllPageData";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 // Fetch data
 const allData = await getAllPageData(2);
@@ -50,12 +51,12 @@ const FourthSection = () => {
         updatedPhotoUrl = cloudinaryData?.url;
 
         if (!updatedPhotoUrl) {
-          alert("Image upload failed. Please try again.");
+          toast.error("Image upload failed. Please try again.");
           return;
         }
       } catch (error) {
         console.error("Error uploading photo:", error);
-        alert("An error occurred while uploading the photo.");
+        toast.error("An error occurred while uploading the photo.");
         return;
       }
     }
@@ -82,13 +83,13 @@ const FourthSection = () => {
       );
 
       if (response.ok) {
-        alert("Data updated successfully!");
+        toast.success("Data updated successfully!");
       } else {
-        alert("Failed to update data. Please try again.");
+        toast.error("Failed to update data. Please try again.");
       }
     } catch (error) {
       console.error("Error updating data:", error);
-      alert("An error occurred while updating the data.");
+      toast.error("An error occurred while updating the data.");
     }
   };
 
@@ -97,14 +98,14 @@ const FourthSection = () => {
       <form>
         <div className="flex flex-col gap-y-3 w-full">
           {/* background image 1 */}
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-2">
             <span className="text-sm font-medium opacity-90">Image 4</span>
             <Image
               src={input.photo}
               alt="img not found"
               width={800}
               height={500}
-              className="object-cover rounded w-full"
+              className="sm:max-h-[600px] sm:h-full max-w-full w-full object-cover rounded"
             />
             <input
               type="file"
@@ -113,20 +114,24 @@ const FourthSection = () => {
               onChange={handlePhotoChange}
             />
           </div>
-          <label htmlFor="" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Title 4</span>
-            <Textarea
-              value={input.title}
-              onChange={(e) => setInput({ ...input, title: e.target.value })}
-            />
-          </label>
-          <label htmlFor="" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Subtitle 4</span>
-            <Textarea
-              value={input.subtitle}
-              onChange={(e) => setInput({ ...input, subtitle: e.target.value })}
-            />
-          </label>
+          <div className="w-full flex max-sm:flex-col sm:items-center sm:justify-between gap-5">
+            <label htmlFor="" className="flex flex-col gap-y-1 w-full">
+              <span className="text-sm font-medium opacity-90">Title 4</span>
+              <Textarea
+                value={input.title}
+                onChange={(e) => setInput({ ...input, title: e.target.value })}
+              />
+            </label>
+            <label htmlFor="" className="flex flex-col gap-y-1 w-full">
+              <span className="text-sm font-medium opacity-90">Subtitle 4</span>
+              <Textarea
+                value={input.subtitle}
+                onChange={(e) =>
+                  setInput({ ...input, subtitle: e.target.value })
+                }
+              />
+            </label>
+          </div>
         </div>
       </form>
       <Button onClick={handleUpdate}>Update</Button>

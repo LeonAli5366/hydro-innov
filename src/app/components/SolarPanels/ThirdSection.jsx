@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 // Fetch data
 const allData = await getAllPageData(2);
@@ -27,7 +28,6 @@ const ThirdSection = () => {
     subtitlthree: thirdData.subtitlthree,
   });
 
-
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -35,13 +35,11 @@ const ThirdSection = () => {
       titleone: input.titleone,
       subtitleone: input.subtitleone,
       titletwo: input.titletwo,
-      subtitle2: input.subtitle2,
+      subtitletwo: input.subtitletwo,
       titlthree: input.titlthree,
       subtitlthree: input.subtitlthree,
       pageId: 2,
     };
-
-    
 
     try {
       const apiRes = await fetch(
@@ -58,13 +56,13 @@ const ThirdSection = () => {
       const apiData = await apiRes.json();
 
       if (apiData.status === "Success") {
-        alert("Section updated successfully!");
+        toast.success("Section updated successfully!");
       } else {
-        alert("Failed to update Section.");
+        toast.error("Failed to update Section.");
       }
     } catch (error) {
       console.error("Error updating Section:", error);
-      alert("An error occurred while updating the Section.");
+      toast.error("An error occurred while updating the Section.");
     }
   };
 
@@ -75,7 +73,7 @@ const ThirdSection = () => {
           <CardHeader>
             <CardTitle>Section 3 Content</CardTitle>
           </CardHeader>
-          <CardContent className="flex justify-between gap-5">
+          <CardContent className="flex max-sm:flex-col sm:justify-between gap-5">
             <div className="w-full space-y-3">
               <label htmlFor="" className="flex flex-col gap-y-1">
                 <span className="text-sm font-medium opacity-90">Title1</span>
@@ -88,7 +86,6 @@ const ThirdSection = () => {
                 >
                   {input.titleone}
                 </Textarea>
-
               </label>
               <label htmlFor="" className="flex flex-col gap-y-1">
                 <span className="text-sm font-medium opacity-90">
@@ -126,10 +123,10 @@ const ThirdSection = () => {
                   name=""
                   id=""
                   onChange={(e) =>
-                    setInput({ ...input, subtitletwo : e.target.value })
+                    setInput({ ...input, subtitletwo: e.target.value })
                   }
                 >
-                  {input.subtitletwo }
+                  {input.subtitletwo}
                 </Textarea>
               </label>
             </div>

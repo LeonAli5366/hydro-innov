@@ -3,6 +3,7 @@ import getAllPageData from "@/app/lib/getAllPageData";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 // Fetch data
 const allData = await getAllPageData(2);
@@ -53,12 +54,12 @@ const SubFirstSection = () => {
         updatedVideoUrl = cloudinaryData?.url;
 
         if (!updatedVideoUrl) {
-          alert("Video upload failed. Please try again.");
+          toast.error("Video upload failed. Please try again.");
           return;
         }
       } catch (error) {
         console.error("Error uploading video:", error);
-        alert("An error occurred while uploading the video.");
+        toast.error("An error occurred while uploading the video.");
         return;
       }
     }
@@ -87,16 +88,16 @@ const SubFirstSection = () => {
       );
 
       if (response.ok) {
-        alert("Data updated successfully!");
+        toast.success("Data updated successfully!");
         setInput({ ...input, video: updatedVideoUrl });
       } else {
         const errorText = await response.text();
         console.error("API Error:", errorText);
-        alert("Failed to update data. Please try again.");
+        toast.error("Failed to update data. Please try again.");
       }
     } catch (error) {
       console.error("Error updating data:", error);
-      alert("An error occurred while updating the data.");
+      toast.error("An error occurred while updating the data.");
     }
   };
 
@@ -111,7 +112,7 @@ const SubFirstSection = () => {
             </span>
             {input.video && (
               <video
-                className="max-h-[600px] h-full w-full object-cover rounded"
+                className="sm:max-h-[600px] sm:h-full w-full object-cover rounded"
                 autoPlay
                 muted
                 loop
@@ -127,7 +128,7 @@ const SubFirstSection = () => {
             />
           </div>
 
-          <div className="w-full flex items-center justify-between gap-5">
+          <div className="w-full flex max-sm:flex-col sm:items-center sm:justify-between gap-5">
             {/* Tag */}
             <label htmlFor="tag" className="flex flex-col gap-y-1 w-full">
               <span className="text-sm font-medium opacity-90">Tag</span>

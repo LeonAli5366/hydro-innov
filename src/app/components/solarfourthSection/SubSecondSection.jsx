@@ -112,7 +112,7 @@ const SubSecondSection = () => {
             </span>
             {input.video && (
               <video
-                className="max-h-[600px] h-full w-full object-cover rounded"
+                className="sm:max-h-[600px] sm:h-full w-full object-cover rounded"
                 autoPlay
                 muted
                 loop
@@ -128,7 +128,7 @@ const SubSecondSection = () => {
             />
           </div>
 
-          <div className="w-full flex items-center justify-between gap-5">
+          <div className="w-full flex max-sm:flex-col sm:items-center sm:justify-between gap-5">
             {/* Tag */}
             <label htmlFor="tag" className="flex flex-col gap-y-1 w-full">
               <span className="text-sm font-medium opacity-90">Tag</span>
