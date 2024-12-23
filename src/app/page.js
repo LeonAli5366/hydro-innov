@@ -30,7 +30,6 @@ const homeData = [
 export default function Home() {
   return (
     <div className="relative text-white">
-      <Header />
       {homeData?.map((home, index) => {
         return (
           <div
