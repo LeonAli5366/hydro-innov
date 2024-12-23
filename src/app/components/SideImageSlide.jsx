@@ -30,7 +30,7 @@ const SideImageSlide = ({ data }) => {
   }
 
   return (
-    <div className="bg-black pb-20">
+    <div className="bg-black pb-20 px-5">
       <div className="py-[64px]">
         <div className="max-w-[1100px] mx-auto flex max-sm:flex-col-reverse items-center justify-between max-sm:px-5 max-sm:gap-y-5">
           <div className="space-y-8">

@@ -190,7 +190,7 @@ const Page = () => {
       </div>
 
       <div className="bg-black text-white">
-        <div className="w-full sm:h-screen flex flex-col justify-between max-w-[1100px] mx-auto sm:gap-20 gap-10 px-5">
+        <div className="w-full sm:h-auto flex flex-col justify-between max-w-[1100px] mx-auto sm:gap-20 gap-10 px-5">
           <div className="w-full flex max-sm:flex-col-reverse items-center justify-between sm:gap-10 h-full">
             <div className="space-y-5">
               <h1 className="text-2xl font-bold sm:max-w-[250px]">
