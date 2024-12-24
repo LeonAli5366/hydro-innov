@@ -23,6 +23,9 @@ const SingleProduct = () => {
   if (!apiUrl) {
     throw new Error("API URL is not defined!");
   }
+  
+  console.log(params.id);
+
   // Fetch product on initial load
   useEffect(() => {
     if (params?.id) {
@@ -89,48 +92,49 @@ const SingleProduct = () => {
     }
   };
 
-  // Update product details
-  const updateProduct = async (id, updatedData) => {
-    const res = await fetch(`${apiUrl}/api/dashboard/product?id=${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedData),
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to update product");
-    }
-
-    return await res.json();
-  };
 
   // Handle product update
   const handleUpdate = async () => {
     try {
       setLoading(true);
-
-      // Upload photo to Cloudinary if a new file is selected
+  
       if (photoFile) {
         const uploadedPhotoUrl = await uploadPhotoToCloudinary(photoFile);
-        formData.photo = uploadedPhotoUrl; // Update photo URL in formData
+        formData.photo = uploadedPhotoUrl;
       }
-
-      // Update the product using the API
-      const updatedProduct = await updateProduct(params.id, {
+  
+      const updatedData = {
+        id: product.id, 
         title: formData.title,
         subTitle: formData.subTitle,
         photo: formData.photo,
+      };
+  
+      console.log("Payload being sent:", updatedData); // Debugging
+  
+      const res = await fetch(`${apiUrl}/api/dashboard/product`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
       });
-
-      setProduct(updatedProduct.data); // Update local state with the updated product
-      setIsEditing(false); // Switch off edit mode
+  
+      const json = await res.json();
+  
+      if (json.status === "Success") {
+        setProduct(json.data); // Update state
+        setIsEditing(false); // Exit edit mode
+      } else {
+        throw new Error(json.message || "Failed to update product");
+      }
     } catch (error) {
       console.error("Error updating product:", error);
-      alert("Failed to update the product");
+      alert("Failed to update the product.");
     } finally {
       setLoading(false);
     }
   };
+  
+  
 
   // Loading state
   if (loading)
@@ -209,7 +213,7 @@ const SingleProduct = () => {
             )}
             <Button
               variant="secondary"
-              onClick={() => router.push("/dashboard/products")}
+              onClick={() => router.push("/dashboard")}
             >
               Back to Products
             </Button>

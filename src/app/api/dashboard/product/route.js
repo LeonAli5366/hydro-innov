@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 // CREATE PRODUCT
 export async function POST(req, res) {
   try {
+
     let reqBody = await req.json();
 
     const prisma = new PrismaClient();
@@ -78,33 +79,51 @@ export async function DELETE(req, res) {
   }
 }
 
+
+
+
 // UPDATE PRODUCT
-export async function PUT(req, res) {
+export async function PUT(req) {
+  const prisma = new PrismaClient();
+
   try {
-    let { title, subTitle, photo } = await req.json();
-
-    let { searchParams } = new URL(req.url);
-    let product_id = searchParams.get("id");
-
-    const prisma = new PrismaClient();
-
-    const result = await prisma.products.update({
-      where: {
-        id: parseInt(product_id),
-      },
-      data: {
-        title,
-        subTitle,
-        photo,
-      },
+    const { id, title, subTitle, photo } = await req.json();
+    console.log("Received ID:", id); // Debugging
+    
+    const product = await prisma.products.findUnique({
+      where: { id: parseInt(id) }, // Ensure `id` is properly handled
     });
 
-    return NextResponse.json({ status: "Success", data: result });
+    if (!product) {
+      return NextResponse.json({
+        status: "Fail",
+        message: "Product not found for the given ID",
+      });
+    }
+
+    const updatedProduct = await prisma.products.update({
+      where: { id: product.id },
+      data: { title, subTitle, photo },
+    });
+
+    return NextResponse.json({
+      status: "Success",
+      data: updatedProduct,
+    });
   } catch (error) {
-    console.error("Error updating product:", error);
-    return NextResponse.json({ status: "Fail", data: "no data" });
+    console.error("Error in PUT products:", error);
+    return NextResponse.json({
+      status: "Fail",
+      message: error.message || "An error occurred",
+    });
+  } finally {
+    await prisma.$disconnect();
   }
 }
+
+
+
+
 
 // GET SINGLE PRODUCT
 export async function PATCH(req, res) {

@@ -90,6 +90,7 @@ export async function PUT(req) {
   }
 }
 
+
 // GET SINGLE SECONDSECTION
 export async function PATCH(req) {
   const prisma = new PrismaClient();
