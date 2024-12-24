@@ -23,8 +23,6 @@ const SingleProduct = () => {
   if (!apiUrl) {
     throw new Error("API URL is not defined!");
   }
-  
-  console.log(params.id);
 
   // Fetch product on initial load
   useEffect(() => {
@@ -92,34 +90,33 @@ const SingleProduct = () => {
     }
   };
 
-
   // Handle product update
   const handleUpdate = async () => {
     try {
       setLoading(true);
-  
+
       if (photoFile) {
         const uploadedPhotoUrl = await uploadPhotoToCloudinary(photoFile);
         formData.photo = uploadedPhotoUrl;
       }
-  
+
       const updatedData = {
-        id: product.id, 
+        id: product.id,
         title: formData.title,
         subTitle: formData.subTitle,
         photo: formData.photo,
       };
-  
+
       console.log("Payload being sent:", updatedData); // Debugging
-  
+
       const res = await fetch(`${apiUrl}/api/dashboard/product`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData),
       });
-  
+
       const json = await res.json();
-  
+
       if (json.status === "Success") {
         setProduct(json.data); // Update state
         setIsEditing(false); // Exit edit mode
@@ -133,8 +130,40 @@ const SingleProduct = () => {
       setLoading(false);
     }
   };
-  
-  
+
+  // Add this function to handle product deletion
+  const handleDelete = async () => {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this product?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      setLoading(true);
+
+      const res = await fetch(
+        `${apiUrl}/api/dashboard/product?id=${product.id}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      const json = await res.json();
+
+      if (json.status === "Success") {
+        alert("Product deleted successfully.");
+        router.push("/dashboard");
+      } else {
+        throw new Error(json.message || "Failed to delete product");
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      alert("Failed to delete the product.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Loading state
   if (loading)
@@ -149,6 +178,7 @@ const SingleProduct = () => {
 
   return (
     <div className="p-5">
+
       <Card className="max-w-3xl mx-auto">
         <CardHeader>
           <CardTitle>
@@ -216,6 +246,9 @@ const SingleProduct = () => {
               onClick={() => router.push("/dashboard")}
             >
               Back to Products
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              Delete Product
             </Button>
           </div>
         </CardContent>

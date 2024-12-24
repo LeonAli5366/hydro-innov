@@ -28,7 +28,7 @@ const SecondSection = () => {
     const fetchData = async () => {
       try {
         const allData = await getAllPageData(1);
-        const secondData = allData?.secondSection || {}; // Accessing secondSection data
+        const secondData = allData?.secondSection || {}; 
 
         // Update state with fetched data
         setInput({
@@ -41,12 +41,12 @@ const SecondSection = () => {
       } catch (err) {
         console.error("Error fetching data:", err);
         setError("Error fetching data");
-        setLoading(false); // Stop loading on error
+        setLoading(false); 
       }
     };
 
     fetchData();
-  }, []); // Empty array means it runs only once when the component mounts
+  }, []); 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!apiUrl) {
     throw new Error("API URL is not defined!");
@@ -68,8 +68,9 @@ const SecondSection = () => {
       photoData.append("file", photoFile);
       photoData.append("upload_preset", "estate");
       photoData.append("cloud_name", "dgupi3gce");
-
+    
       try {
+        console.log("Uploading photo to Cloudinary...");
         const cloudinaryRes = await fetch(
           "https://api.cloudinary.com/v1_1/dgupi3gce/image/upload",
           {
@@ -77,11 +78,16 @@ const SecondSection = () => {
             body: photoData,
           }
         );
+    
         const cloudinaryData = await cloudinaryRes.json();
+        console.log("Cloudinary response:", cloudinaryData);
+    
         const photoUrl = cloudinaryData?.url;
-
         if (photoUrl) {
-          updateData.photo = photoUrl; // Update with the URL from Cloudinary
+          setNewProductData((prev) => ({ ...prev, photo: photoUrl }));
+          console.log("Photo URL:", photoUrl);
+        } else {
+          throw new Error("Photo URL not found in Cloudinary response");
         }
       } catch (error) {
         console.error("Error uploading photo:", error);
@@ -89,6 +95,7 @@ const SecondSection = () => {
         return;
       }
     }
+    
 
     // Update section in the backend
     try {

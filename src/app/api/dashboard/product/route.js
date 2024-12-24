@@ -2,23 +2,43 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 // CREATE PRODUCT
-export async function POST(req, res) {
+export async function POST(req) {
+  const prisma = new PrismaClient();
+
   try {
+    const { title, subTitle, photo, pageId } = await req.json();
 
-    let reqBody = await req.json();
+    if (!title || !subTitle || !pageId) {
+      return NextResponse.json({
+        status: "Fail",
+        message: "Title, Subtitle, and Page ID are required.",
+      });
+    }
 
-    const prisma = new PrismaClient();
-
-    const result = await prisma.products.create({
-      data: reqBody,
+    const newProduct = await prisma.products.create({
+      data: {
+        title,
+        subTitle,
+        photo,
+        pageId,
+      },
     });
 
-    return NextResponse.json({ status: "Success", data: result });
+    return NextResponse.json({
+      status: "Success",
+      data: newProduct,
+    });
   } catch (error) {
-    console.error("Error creating order:", error);
-    return NextResponse.json({ status: "Fail", data: "no data" });
+    console.error("Error creating product:", error);
+    return NextResponse.json({
+      status: "Fail",
+      message: error.message || "Failed to create product",
+    });
+  } finally {
+    await prisma.$disconnect();
   }
 }
+
 
 // GET ALL PRODUCT
 export async function GET(req, res) {
@@ -79,9 +99,6 @@ export async function DELETE(req, res) {
   }
 }
 
-
-
-
 // UPDATE PRODUCT
 export async function PUT(req) {
   const prisma = new PrismaClient();
@@ -89,7 +106,7 @@ export async function PUT(req) {
   try {
     const { id, title, subTitle, photo } = await req.json();
     console.log("Received ID:", id); // Debugging
-    
+
     const product = await prisma.products.findUnique({
       where: { id: parseInt(id) }, // Ensure `id` is properly handled
     });
@@ -120,10 +137,6 @@ export async function PUT(req) {
     await prisma.$disconnect();
   }
 }
-
-
-
-
 
 // GET SINGLE PRODUCT
 export async function PATCH(req, res) {
