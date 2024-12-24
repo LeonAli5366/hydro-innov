@@ -1,24 +1,39 @@
-'use client'
-import getAllPageData from "@/app/lib/getAllPageData";
+"use client";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
-import React, { useState } from "react";
+import { toast } from "sonner";
+import getAllPageData from "@/app/lib/getAllPageData";
 
 // Fetch data
-const allData = await getAllPageData(1);
-const tenthData = allData?.tenthSection || [];
-const tenthObject = tenthData?.[0];
+const fetchData = async () => {
+  const allData = await getAllPageData(1);
+  return allData?.tenthSection || [];
+};
 
 const SubFirstSection = () => {
-  // Sub section 1
   const [input, setInput] = useState({
-    title: tenthObject?.title || "",
-    subtitle: tenthObject?.subtitle || "",
-    photo: tenthObject?.photo || "",
+    title: "",
+    subtitle: "",
+    photo: "",
   });
-
   const [photoFile, setPhotoFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const tenthData = await fetchData();
+      const firstObject = tenthData?.[0] || {};
+      setInput({
+        title: firstObject?.title || "",
+        subtitle: firstObject?.subtitle || "",
+        photo: firstObject?.photo || "",
+      });
+    };
+
+    loadData();
+  }, []);
 
   // Handle image selection
   const handlePhotoChange = (e) => {
@@ -30,7 +45,10 @@ const SubFirstSection = () => {
     throw new Error("API URL is not defined!");
   }
   // Handle update
-  const handleUpdate = async () => {
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
     let updatedPhotoUrl = input.photo;
 
     // If there's a new photo, upload it to Cloudinary
@@ -52,12 +70,14 @@ const SubFirstSection = () => {
         updatedPhotoUrl = cloudinaryData?.url;
 
         if (!updatedPhotoUrl) {
-          alert("Image upload failed. Please try again.");
+          toast.error("Image upload failed. Please try again.");
+          setLoading(false);
           return;
         }
       } catch (error) {
         console.error("Error uploading photo:", error);
-        alert("An error occurred while uploading the photo.");
+        toast.error("An error occurred while uploading the photo.");
+        setLoading(false);
         return;
       }
     }
@@ -84,29 +104,31 @@ const SubFirstSection = () => {
       );
 
       if (response.ok) {
-        alert("Data updated successfully!");
+        toast.success("Data updated successfully!");
       } else {
-        alert("Failed to update data. Please try again.");
+        toast.error("Failed to update data. Please try again.");
       }
     } catch (error) {
       console.error("Error updating data:", error);
-      alert("An error occurred while updating the data.");
+      toast.error("An error occurred while updating the data.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="w-full flex justify-between gap-5">
+    <div className="w-full flex flex-col gap-5">
       <form>
         <div className="flex flex-col gap-y-3 w-full">
-          {/* background image 1 */}
-          <div className="w-full">
+          {/* Background image */}
+          <div className="w-full flex flex-col gap-2">
             <span className="text-sm font-medium opacity-90">Image 1</span>
             <Image
-              src={input.photo}
-              alt="img not found"
+              src={input.photo || "/placeholder-image.jpg"}
+              alt="Image not found"
               width={800}
               height={500}
-              className="object-cover rounded w-full"
+              className="sm:max-h-[600px] sm:h-full max-w-full w-full object-cover rounded"
             />
             <input
               type="file"
@@ -115,23 +137,33 @@ const SubFirstSection = () => {
               onChange={handlePhotoChange}
             />
           </div>
-          <label htmlFor="" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Title 1</span>
-            <Textarea
-              value={input.title}
-              onChange={(e) => setInput({ ...input, title: e.target.value })}
-            />
-          </label>
-          <label htmlFor="" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Subtitle 1</span>
-            <Textarea
-              value={input.subtitle}
-              onChange={(e) => setInput({ ...input, subtitle: e.target.value })}
-            />
-          </label>
+          <div className="w-full flex max-sm:flex-col sm:items-center sm:justify-between gap-5">
+            <label htmlFor="title" className="flex flex-col gap-y-1 w-full">
+              <span className="text-sm font-medium opacity-90">Title 1</span>
+              <Textarea
+                id="title"
+                value={input.title}
+                onChange={(e) =>
+                  setInput({ ...input, title: e.target.value })
+                }
+              />
+            </label>
+            <label htmlFor="subtitle" className="flex flex-col gap-y-1 w-full">
+              <span className="text-sm font-medium opacity-90">Subtitle 1</span>
+              <Textarea
+                id="subtitle"
+                value={input.subtitle}
+                onChange={(e) =>
+                  setInput({ ...input, subtitle: e.target.value })
+                }
+              />
+            </label>
+          </div>
         </div>
       </form>
-      <Button onClick={handleUpdate}>Update</Button>
+      <Button onClick={handleUpdate} disabled={loading}>
+        {loading ? "Updating..." : "Update"}
+      </Button>
     </div>
   );
 };

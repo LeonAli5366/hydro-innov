@@ -9,19 +9,44 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import getAllPageData from "@/app/lib/getAllPageData";
-
-// Fetch data
-const allData = await getAllPageData(1);
-const secondData = allData?.secondSection || [];
+import { toast } from "sonner";
 
 const SecondSection = () => {
+  // State for input fields and loading state
   const [input, setInput] = useState({
-    title:secondData.title,
-    subtitle: secondData.subtitle,
-    photo: secondData.photo,
+    title: "",
+    subtitle: "",
+    photo: "",
   });
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error handling
+
+  // Fetch data inside useEffect
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const allData = await getAllPageData(1);
+        const secondData = allData?.secondSection || {}; // Accessing secondSection data
+
+        // Update state with fetched data
+        setInput({
+          title: secondData.title || "",
+          subtitle: secondData.subtitle || "",
+          photo: secondData.photo || "",
+        });
+
+        setLoading(false); // Finished loading
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError("Error fetching data");
+        setLoading(false); // Stop loading on error
+      }
+    };
+
+    fetchData();
+  }, []); // Empty array means it runs only once when the component mounts
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!apiUrl) {
     throw new Error("API URL is not defined!");
@@ -37,6 +62,7 @@ const SecondSection = () => {
       pageId: 1,
     };
 
+    // Handle image upload if a new photo is selected
     if (photoFile) {
       const photoData = new FormData();
       photoData.append("file", photoFile);
@@ -55,7 +81,7 @@ const SecondSection = () => {
         const photoUrl = cloudinaryData?.url;
 
         if (photoUrl) {
-          updateData.photo = photoUrl;
+          updateData.photo = photoUrl; // Update with the URL from Cloudinary
         }
       } catch (error) {
         console.error("Error uploading photo:", error);
@@ -64,6 +90,7 @@ const SecondSection = () => {
       }
     }
 
+    // Update section in the backend
     try {
       const apiRes = await fetch(
         `${apiUrl}/api/dashboard/tesla/secondSection?id=1`,
@@ -79,15 +106,24 @@ const SecondSection = () => {
       const apiData = await apiRes.json();
 
       if (apiData.status === "Success") {
-        alert("Section updated successfully!");
+        toast.success("Section updated successfully!");
       } else {
-        alert("Failed to update Section.");
+        toast.error("Failed to update Section.");
       }
     } catch (error) {
       console.error("Error updating Section:", error);
-      alert("An error occurred while updating the Section.");
+      toast.error("An error occurred while updating the Section.");
     }
   };
+
+  // Handle loading or error states
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="p-5">
@@ -96,9 +132,24 @@ const SecondSection = () => {
           <CardHeader>
             <CardTitle>Section 2 content</CardTitle>
           </CardHeader>
-          <CardContent className="flex justify-between gap-5">
-            <div className="w-full space-y-3">
-              <label htmlFor="title" className="flex flex-col gap-y-1">
+          <CardContent className="flex flex-col gap-5">
+            <div className="w-full flex flex-col gap-2">
+              <span className="text-sm font-medium opacity-90">
+                Background Photo
+              </span>
+              {input.photo && (
+                <img
+                  src={input.photo}
+                  alt="Background Photo"
+                  width={800}
+                  height={500}
+                  className="object-cover rounded sm:max-h-[600px] max-w-full w-full sm:h-full"
+                />
+              )}
+              <input type="file" name="photo" />
+            </div>
+            <div className="w-full flex max-sm:flex-col sm:items-center sm:justify-between gap-5">
+              <label htmlFor="title" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Title</span>
                 <Textarea
                   name="title"
@@ -109,7 +160,10 @@ const SecondSection = () => {
                   }
                 />
               </label>
-              <label htmlFor="subtitle" className="flex flex-col gap-y-1">
+              <label
+                htmlFor="subtitle"
+                className="flex flex-col gap-y-1 w-full"
+              >
                 <span className="text-sm font-medium opacity-90">Subtitle</span>
                 <Textarea
                   name="subtitle"
@@ -120,21 +174,6 @@ const SecondSection = () => {
                   }
                 />
               </label>
-            </div>
-            <div className="w-full">
-              <span className="text-sm font-medium opacity-90">
-                Background Photo
-              </span>
-              {input.photo && (
-                <img
-                  src={input.photo}
-                  alt="Background Photo"
-                  width={800}
-                  height={500}
-                  className="object-cover rounded"
-                />
-              )}
-              <input type="file" name="photo" className="mt-3" />
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">

@@ -11,18 +11,42 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-// Fetch data
-const allData = await getAllPageData(1);
-const fisrtData = allData?.firstSection || [];
 
 const FirstSection = () => {
-  const [input, setinput] = useState({
-    title: fisrtData.title,
-    subtitle: fisrtData.subtitle,
-    video: fisrtData.video,
+  // State to store the fetched data
+  const [input, setInput] = useState({
+    title: "",
+    subtitle: "",
+    video: "",
   });
+  const [loading, setLoading] = useState(true); // State for loading status
+  const [error, setError] = useState(null); // State for error handling
+
+  // Fetch data when the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const allData = await getAllPageData(1);
+        const firstData = allData?.firstSection || {};
+        
+        // Update the state with fetched data
+        setInput({
+          title: firstData.title || "",
+          subtitle: firstData.subtitle || "",
+          video: firstData.video || "",
+        });
+        setLoading(false); // Data loaded successfully
+      } catch (err) {
+        setError("Error fetching data");
+        setLoading(false); // Error occurred, stop loading
+      }
+    };
+
+    fetchData(); // Call the async function inside useEffect
+  }, []); // Empty dependency array ensures this runs only once on mount
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!apiUrl) {
     throw new Error("API URL is not defined!");
@@ -37,7 +61,6 @@ const FirstSection = () => {
       video: input.video,
       pageId: 1,
     };
-
 
     if (videoFile) {
       const videoData = new FormData();
@@ -81,15 +104,24 @@ const FirstSection = () => {
       const apiData = await apiRes.json();
 
       if (apiData.status === "Success") {
-        alert("Section updated successfully!");
+        toast.success("Section updated successfully!");
       } else {
-        alert("Failed to update Section.");
+        toast.error("Failed to update Section.");
       }
     } catch (error) {
       console.error("Error updating Section:", error);
-      alert("An error occurred while updating the Section.");
+      toast.error("An error occurred while updating the Section.");
     }
   };
+
+  // Show loading or error if applicable
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="p-5">
@@ -98,39 +130,42 @@ const FirstSection = () => {
           <CardHeader>
             <CardTitle>Sec 1 content</CardTitle>
           </CardHeader>
-          <CardContent className="flex justify-between gap-5">
-            <div className="w-full space-y-3">
-              <label htmlFor="" className="flex flex-col gap-y-1">
+          <CardContent className="flex flex-col gap-5">
+            <div className="w-full flex flex-col gap-2">
+              <span className="text-sm font-medium opacity-90">
+                Background Video
+              </span>
+              <video
+                className="sm:max-h-[600px] w-full sm:h-full object-cover rounded"
+                autoPlay
+                muted
+                loop
+              >
+                <source src={input?.video} type="video/webm" />
+              </video>
+              <input type="file" name="video" />
+            </div>
+            <div className="w-full flex max-sm:flex-col sm:items-center sm:justify-between gap-5">
+              <label htmlFor="" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Title</span>
                 <Textarea
                   name=""
                   id=""
                   onChange={(e) =>
-                    setinput({ ...input, title: e.target.value })
+                    setInput({ ...input, title: e.target.value })
                   }
-                >
-                  {input.title}
-                </Textarea>
+                  value={input.title} // Set value from state
+                />
               </label>
-              <label htmlFor="" className="flex flex-col gap-y-1">
+              <label htmlFor="" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Subtitle</span>
                 <Textarea
                   onChange={(e) =>
-                    setinput({ ...input, subtitle: e.target.value })
+                    setInput({ ...input, subtitle: e.target.value })
                   }
-                >
-                  {input.subtitle}
-                </Textarea>
+                  value={input.subtitle} // Set value from state
+                />
               </label>
-            </div>
-            <div className="w-full">
-              <span className="text-sm font-medium opacity-90">
-                Background Video
-              </span>
-              <video className="object-cover rounded" autoPlay muted loop>
-                <source src={input.video} type="video/webm" />
-              </video>
-              <input type="file" name="video" />
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">

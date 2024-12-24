@@ -1,23 +1,45 @@
 "use client";
+import { useState, useEffect } from "react";
 import getAllPageData from "@/app/lib/getAllPageData";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
+import { toast } from "sonner";
 
-// Fetch data
-const allData = await getAllPageData(3);
-const fourthData = allData?.fourthSection || [];
-const fourthObject = fourthData?.[0];
-console.log(fourthObject);
-
+// Define SubFirstSection component
 const SubFirstSection = () => {
   const [input, setInput] = useState({
-    tag: fourthObject?.tag || "",
-    desc: fourthObject?.desc || "",
-    video: fourthObject?.video || "",
+    tag: "",
+    desc: "",
+    video: "",
   });
 
   const [videoFile, setVideoFile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch data inside useEffect
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const allData = await getAllPageData(3);
+        const fourthData = allData?.fourthSection || [];
+        const fourthObject = fourthData?.[0] || {};
+
+        setInput({
+          tag: fourthObject?.tag || "",
+          desc: fourthObject?.desc || "",
+          video: fourthObject?.video || "",
+        });
+        setLoading(false); // Finished loading
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError("Error fetching data");
+        setLoading(false); // Stop loading on error
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array to run only once when the component mounts
 
   // Handle video file selection
   const handleVideoChange = (e) => {
@@ -30,12 +52,10 @@ const SubFirstSection = () => {
     const { id, value } = e.target;
     setInput((prev) => ({ ...prev, [id]: value }));
   };
-
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!apiUrl) {
     throw new Error("API URL is not defined!");
   }
-
   // Handle update
   const handleUpdate = async () => {
     let updatedVideoUrl = input.video;
@@ -59,12 +79,12 @@ const SubFirstSection = () => {
         updatedVideoUrl = cloudinaryData?.url;
 
         if (!updatedVideoUrl) {
-          alert("Video upload failed. Please try again.");
+          toast.error("Video upload failed. Please try again.");
           return;
         }
       } catch (error) {
         console.error("Error uploading video:", error);
-        alert("An error occurred while uploading the video.");
+        toast.error("An error occurred while uploading the video.");
         return;
       }
     }
@@ -76,8 +96,6 @@ const SubFirstSection = () => {
       video: updatedVideoUrl,
       pageId: 3,
     };
-
-    console.log("Updating data:", updateData);
 
     // Send data to the API
     try {
@@ -93,30 +111,44 @@ const SubFirstSection = () => {
       );
 
       if (response.ok) {
-        alert("Data updated successfully!");
+        toast.success("Data updated successfully!");
         setInput({ ...input, video: updatedVideoUrl });
       } else {
         const errorText = await response.text();
         console.error("API Error:", errorText);
-        alert("Failed to update data. Please try again.");
+        toast.error("Failed to update data. Please try again.");
       }
     } catch (error) {
       console.error("Error updating data:", error);
-      alert("An error occurred while updating the data.");
+      toast.error("An error occurred while updating the data.");
     }
   };
+
+  // Handle loading or error states
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="w-full flex flex-col gap-5">
       <form>
         <div className="flex flex-col gap-y-3 w-full">
           {/* Video preview */}
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-2">
             <span className="text-sm font-medium opacity-90">
               Background Video
             </span>
             {input.video && (
-              <video className="object-cover rounded" autoPlay muted loop>
+              <video
+                className="sm:max-h-[600px] sm:h-full w-full object-cover rounded"
+                autoPlay
+                muted
+                loop
+              >
                 <source src={input.video} type="video/mp4" />
               </video>
             )}
@@ -128,21 +160,29 @@ const SubFirstSection = () => {
             />
           </div>
 
-          {/* Tag */}
-          <label htmlFor="tag" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Tag</span>
-            <Textarea id="tag" value={input.tag} onChange={handleInputChange} />
-          </label>
+          <div className="w-full flex max-sm:flex-col sm:items-center sm:justify-between gap-5">
+            {/* Tag */}
+            <label htmlFor="tag" className="flex flex-col gap-y-1 w-full">
+              <span className="text-sm font-medium opacity-90">Tag</span>
+              <Textarea
+                id="tag"
+                value={input.tag}
+                onChange={handleInputChange}
+              />
+            </label>
 
-          {/* Description */}
-          <label htmlFor="desc" className="flex flex-col gap-y-1 w-full">
-            <span className="text-sm font-medium opacity-90">Description</span>
-            <Textarea
-              id="desc"
-              value={input.desc}
-              onChange={handleInputChange}
-            />
-          </label>
+            {/* Description */}
+            <label htmlFor="desc" className="flex flex-col gap-y-1 w-full">
+              <span className="text-sm font-medium opacity-90">
+                Description
+              </span>
+              <Textarea
+                id="desc"
+                value={input.desc}
+                onChange={handleInputChange}
+              />
+            </label>
+          </div>
         </div>
       </form>
       <Button onClick={handleUpdate}>Update</Button>

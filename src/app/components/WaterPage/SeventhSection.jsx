@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import getAllPageData from "@/app/lib/getAllPageData";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,33 +10,54 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
-
-// Fetch data
-const allData = await getAllPageData(1);
-const seventhData = allData?.seventhSection || [];
+import { toast } from "sonner";
+import getAllPageData from "@/app/lib/getAllPageData";
 
 const SeventhSection = () => {
   const [input, setInput] = useState({
-    title: seventhData.title,
-    subtitle: seventhData.subtitle,
-    photo: seventhData.photo,
+    title: "",
+    subtitle: "",
+    photo: "",
   });
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
+
+  // Fetch data on mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const allData = await getAllPageData(1);
+        const seventhData = allData?.seventhSection || [];
+        setInput({
+          title: seventhData?.title || "",
+          subtitle: seventhData?.subtitle || "",
+          photo: seventhData?.photo || "",
+        });
+        setLoading(false);
+      } catch (err) {
+        setError("Error fetching data.");
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) setPhotoFile(file);
+  };
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!apiUrl) {
     throw new Error("API URL is not defined!");
   }
   const handleUpdate = async (e) => {
     e.preventDefault();
+    let updatedPhotoUrl = input.photo;
 
-    const photoFile = e.target.photo?.files[0];
-    const updateData = {
-      title: input.title,
-      subtitle: input.subtitle,
-      photo: input.photo,
-      pageId: 1,
-    };
-
+    // If there is a new photo selected, upload it
     if (photoFile) {
       const photoData = new FormData();
       photoData.append("file", photoFile);
@@ -52,18 +73,28 @@ const SeventhSection = () => {
           }
         );
         const cloudinaryData = await cloudinaryRes.json();
-        const photoUrl = cloudinaryData?.url;
+        updatedPhotoUrl = cloudinaryData?.url;
 
-        if (photoUrl) {
-          updateData.photo = photoUrl;
+        if (!updatedPhotoUrl) {
+          toast.error("Image upload failed. Please try again.");
+          return;
         }
       } catch (error) {
         console.error("Error uploading photo:", error);
-        alert("An error occurred while uploading the photo.");
+        toast.error("An error occurred while uploading the photo.");
         return;
       }
     }
 
+    // Prepare update data
+    const updateData = {
+      title: input.title,
+      subtitle: input.subtitle,
+      photo: updatedPhotoUrl,
+      pageId: 1,
+    };
+
+    // Update data via API
     try {
       const apiRes = await fetch(
         `${apiUrl}/api/dashboard/tesla/seventhSection?id=1`,
@@ -79,15 +110,24 @@ const SeventhSection = () => {
       const apiData = await apiRes.json();
 
       if (apiData.status === "Success") {
-        alert("Section updated successfully!");
+        toast.success("Section updated successfully!");
       } else {
-        alert("Failed to update Section.");
+        toast.error("Failed to update Section.");
       }
     } catch (error) {
       console.error("Error updating Section:", error);
-      alert("An error occurred while updating the Section.");
+      toast.error("An error occurred while updating the Section.");
     }
   };
+
+  // Show loading or error states
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="p-5">
@@ -97,7 +137,7 @@ const SeventhSection = () => {
             <CardTitle>Section 7 Content</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-5">
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-2">
               <span className="text-sm font-medium opacity-90">
                 Background Image
               </span>
@@ -106,23 +146,30 @@ const SeventhSection = () => {
                 alt="Section Background"
                 width={800}
                 height={500}
-                className="object-cover rounded"
+                className="sm:max-h-[600px] sm:h-full max-w-full w-full object-cover rounded"
               />
-              <input type="file" name="photo" />
+              <input
+                type="file"
+                name="photo"
+                onChange={handlePhotoChange}
+                className="mt-2"
+              />
             </div>
-            <div className="flex justify-between gap-x-5 w-full">
-              <label htmlFor="" className="flex flex-col gap-y-1 w-full">
+            <div className="flex max-sm:flex-col sm:items-center sm:justify-between gap-5 w-full">
+              <label htmlFor="title" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Title</span>
                 <Textarea
+                  id="title"
                   value={input.title}
                   onChange={(e) =>
                     setInput({ ...input, title: e.target.value })
                   }
                 />
               </label>
-              <label htmlFor="" className="flex flex-col gap-y-1 w-full">
+              <label htmlFor="subtitle" className="flex flex-col gap-y-1 w-full">
                 <span className="text-sm font-medium opacity-90">Subtitle</span>
                 <Textarea
+                  id="subtitle"
                   value={input.subtitle}
                   onChange={(e) =>
                     setInput({ ...input, subtitle: e.target.value })

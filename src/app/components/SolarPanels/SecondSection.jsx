@@ -27,7 +27,7 @@ const SecondSection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const allData = await getAllPageData(2);
+        const allData = await getAllPageData(1);
         const secondData = allData?.secondSection || {}; // Accessing secondSection data
 
         // Update state with fetched data
@@ -59,7 +59,7 @@ const SecondSection = () => {
       title: input.title,
       subtitle: input.subtitle,
       photo: input.photo,
-      pageId: 2,
+      pageId: 1,
     };
 
     // Handle image upload if a new photo is selected
@@ -93,7 +93,7 @@ const SecondSection = () => {
     // Update section in the backend
     try {
       const apiRes = await fetch(
-        `${apiUrl}/api/dashboard/tesla/secondSection?id=2`,
+        `${apiUrl}/api/dashboard/tesla/secondSection?id=1`,
         {
           method: "PUT",
           headers: {
