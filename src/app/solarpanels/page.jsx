@@ -59,6 +59,7 @@ const Page = () => {
   const ninethSection = allData?.ninethSection || {};
   const tenthSection = allData?.tenthSection || {};
   console.log(allData);
+  
 
   return (
     <>
