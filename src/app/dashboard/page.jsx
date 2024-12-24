@@ -36,7 +36,7 @@ const Page = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [apiUrl]);
 
   // Render loading state, error state, or product data
   if (loading) {

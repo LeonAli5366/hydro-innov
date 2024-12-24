@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/card";
 import { PropagateLoader } from "react-spinners";
 
+// Define your columns
 const columns = [
   {
     accessorKey: "address",
@@ -73,6 +74,26 @@ const columns = [
     accessorKey: "userPhone",
     header: "Phone Number",
     cell: ({ row }) => row.getValue("userPhone"),
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row, updateStatus }) => {
+      const user = row.original;
+
+      // Display the current status and allow updating it
+      return (
+        <select
+          value={user.status}
+          onChange={(e) => updateStatus(user.id, e.target.value)}
+          className="p-2 border rounded"
+        >
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+          <option value="Pending">Pending</option>
+        </select>
+      );
+    },
   },
   {
     id: "actions",
@@ -131,9 +152,24 @@ export function DataTable() {
     };
 
     fetchUserData();
-  }, []);
+  }, [apiUrl]);
 
-  // We now call useReactTable **unconditionally**
+  // Function to handle status change
+  const updateStatus = (userId, newStatus) => {
+    setUserData((prevData) =>
+      prevData.map((user) =>
+        user.id === userId ? { ...user, status: newStatus } : user
+      )
+    );
+
+    // Optionally, call an API to update the status on the server
+    // fetch(`${apiUrl}/api/updateStatus`, {
+    //   method: "POST",
+    //   body: JSON.stringify({ userId, newStatus }),
+    // });
+  };
+
+  // React Table initialization
   const table = useReactTable({
     data: userData,
     columns,
@@ -208,7 +244,6 @@ export function DataTable() {
           </DropdownMenu>
         </div>
 
-        {/* Add horizontal scrolling for mobile */}
         <div className="overflow-x-auto">
           <Table className="min-w-full">
             <TableHeader>

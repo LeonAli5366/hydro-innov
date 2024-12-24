@@ -42,6 +42,36 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [logo, setLogo] = useState("/images/logo-white.png");
 
+  // State to store product data
+  const [products, setProducts] = useState([]);
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL is not defined!");
+  }
+
+  // Fetch product data when the component mounts
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/api/dashboard/product`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch product data");
+        }
+
+        const data = await response.json();
+        setProducts(data); // Store the fetched products data
+      } catch (error) {
+        setError(error.message); // Handle error
+      } finally {
+        setLoading(false); // Set loading to false after the fetch is done
+      }
+    };
+
+    fetchProductData();
+  }, [apiUrl]);
+
   // Detect scroll position and toggle `isScrolled` state
   useEffect(() => {
     const handleScroll = () => {
@@ -61,6 +91,7 @@ export default function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   return (
     <header
       className={`${
@@ -86,27 +117,22 @@ export default function Header() {
               </NavigationMenuTrigger>
               <NavigationMenuContent onMouseEnter={() => setIsScrolled(true)}>
                 <div className="flex items-center gap-20 p-20">
-                  {SolarPanelsData?.map((data, i) => {
+                  {products.data?.map((data, i) => {
                     return (
                       <div key={i} className="flex flex-col items-center gap-5">
-                        <Image
-                          src={data?.image}
+                        <img
+                          src={data?.photo}
                           alt=""
-                          width={500}
-                          height={500}
-                          className="min-w-[200px]"
+                          className="w-[300px] h-[150px] object-cover"
                         />
-                        <span className="text-nowrap text-lg font-semibold">
-                          {data?.name}
-                        </span>
-                        <div className="flex items-center gap-3">
-                          <button className="text-sm font-medium text-black opacity-80">
-                            Learn
-                          </button>
-                          <button className="text-sm font-medium text-black opacity-80">
-                            Order
-                          </button>
-                        </div>
+                        <span className="text-nowrap">{data?.title}</span>
+                        <NavigationMenuLink>
+                          <Link href={"/water/order"}>
+                            <button className="text-sm font-medium text-black opacity-80">
+                              Order Now
+                            </button>
+                          </Link>
+                        </NavigationMenuLink>
                       </div>
                     );
                   })}
@@ -123,29 +149,22 @@ export default function Header() {
               </NavigationMenuTrigger>
               <NavigationMenuContent onMouseEnter={() => setIsScrolled(true)}>
                 <div className="flex items-center gap-20 p-20">
-                  {SolarPanelsData?.map((data, i) => {
+                  {products.data?.map((data, i) => {
                     return (
                       <div key={i} className="flex flex-col items-center gap-5">
-                        <Image
-                          src={data?.image}
+                        <img
+                          src={data?.photo}
                           alt=""
-                          width={500}
-                          height={500}
-                          className="min-w-[200px]"
+                          className="w-[300px] h-[150px] object-cover"
                         />
-                        <span className="text-nowrap">{data?.name}</span>
-                        <div className="flex items-center gap-3">
-                          <NavigationMenuLink>
-                            <a href={"/solarpanels"}>
-                              <button className="text-sm font-medium text-black opacity-80">
-                                Learn
-                              </button>
-                            </a>
-                          </NavigationMenuLink>
-                          <button className="text-sm font-medium text-black opacity-80">
-                            Order
-                          </button>
-                        </div>
+                        <span className="text-nowrap">{data?.title}</span>
+                        <NavigationMenuLink>
+                          <Link href={"/solarpanels/order"}>
+                            <button className="text-sm font-medium text-black opacity-80">
+                              Order Now
+                            </button>
+                          </Link>
+                        </NavigationMenuLink>
                       </div>
                     );
                   })}
@@ -162,25 +181,22 @@ export default function Header() {
               </NavigationMenuTrigger>
               <NavigationMenuContent onMouseEnter={() => setIsScrolled(true)}>
                 <div className="flex items-center gap-20 p-20">
-                  {SolarPanelsData?.map((data, i) => {
+                  {products.data?.map((data, i) => {
                     return (
                       <div key={i} className="flex flex-col items-center gap-5">
-                        <Image
-                          src={data?.image}
+                        <img
+                          src={data?.photo}
                           alt=""
-                          width={500}
-                          height={500}
-                          className="min-w-[200px]"
+                          className="w-[300px] h-[150px] object-cover"
                         />
-                        <span className="text-nowrap">{data?.name}</span>
-                        <div className="flex items-center gap-3">
-                          <button className="text-sm font-medium text-black opacity-80">
-                            Learn
-                          </button>
-                          <button className="text-sm font-medium text-black opacity-80">
-                            Order
-                          </button>
-                        </div>
+                        <span className="text-nowrap">{data?.title}</span>
+                        <NavigationMenuLink>
+                          <Link href={"/hvac/order"}>
+                            <button className="text-sm font-medium text-black opacity-80">
+                              Order Now
+                            </button>
+                          </Link>
+                        </NavigationMenuLink>
                       </div>
                     );
                   })}
